@@ -1,0 +1,16 @@
+{
+  "name": "Sevantra - Civic Engagement",
+  "short_name": "Sevantra",
+  "description": "Civic engagement platform for volunteering, donations, and community impact.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#E9501B",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

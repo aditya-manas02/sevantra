@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GlobalRole {
+  CITIZEN
+  PLATFORM_ADMIN
+}
+
+enum OrgRole {
+  MEMBER
+  ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  role         GlobalRole   @default(CITIZEN)
+  avatarUrl    String?
+  bio          String?
+  phoneNumber  String?
+  locationCity String?
+  skills       String[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  orgMembers   OrgMember[]
+  createdEvents Event[]
+  registrations EventRegistration[]
+  feedbacks    EventFeedback[]
+  badges       UserBadge[]
+  comments     EventComment[]
+  donations    Donation[]
+}
+
+enum OrgType {
+  NON_PROFIT
+  CORPORATE
+  GOVERNMENT
+  COMMUNITY
+}
+
+model Organization {
+  id                 String             @id @default(uuid())
+  name               String             @unique
+  type               OrgType            @default(COMMUNITY)
+  description        String
+  website            String?
+  verificationStatus VerificationStatus @default(PENDING)
+  verificationDocUrl String?
+  logoUrl            String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  members            OrgMember[]
+  events             Event[]
+  donations          Donation[]
+}
+
+model OrgMember {
+  id             String       @id @default(uuid())
+  userId         String
+  organizationId String
+  role           OrgRole      @default(MEMBER)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([userId, organizationId])
+}
+
+model EventCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  icon        String?
+  events      Event[]
+}
+
+model Event {
+  id             String        @id @default(uuid())
+  title          String
+  description    String
+  categoryId     String
+  category       EventCategory @relation(fields: [categoryId], references: [id])
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  creatorId      String
+  creator        User          @relation(fields: [creatorId], references: [id])
+  
+  startDate      DateTime
+  endDate        DateTime
+  
+  locationName   String
+  latitude       Float
+  longitude      Float
+  
+  capacity       Int?
+  providesCertificate Boolean @default(false)
+  requirements   String?
+  minimumAge     Int?
+  imageUrl       String?
+  
+  acceptsDonations Boolean @default(false)
+  upiId            String?
+  minDonationAmount Float?
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  registrations  EventRegistration[]
+  feedbacks      EventFeedback[]
+  comments       EventComment[]
+  donations      Donation[]
+}
+
+enum RegistrationStatus {
+  ATTENDING
+  WAITLISTED
+  CHECKED_IN
+  CANCELLED
+}
+
+model EventRegistration {
+  id             String             @id @default(uuid())
+  eventId        String
+  event          Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status         RegistrationStatus @default(ATTENDING)
+  checkedInAt    DateTime?
+  checkInToken   String?            @unique
+  
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@unique([eventId, userId])
+}
+
+model EventFeedback {
+  id             String       @id @default(uuid())
+  eventId        String
+  event          Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating         Int          // 1 to 5
+  comment        String?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([eventId, userId])
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String
+  iconUrl     String?
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  awardedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+model EventComment {
+  id        String   @id @default(uuid())
+  content   String
+  mediaUrl  String?
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Donation {
+  id              String   @id @default(uuid())
+  amount          Float
+  currency        String   @default("USD")
+  status          String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  stripeSessionId String?  @unique
+  
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  
+  eventId         String?
+  event           Event?   @relation(fields: [eventId], references: [id])
+
+  organizationId  String?
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

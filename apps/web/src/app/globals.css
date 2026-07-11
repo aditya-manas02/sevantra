@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand Colors */
+  --color-brand-primary: var(--primary);
+  --color-brand-primary-hover: var(--primary-hover);
+  --color-brand-secondary: var(--secondary);
+  --color-brand-accent: var(--accent);
+  
+  --color-brand-surface: var(--surface);
+  --color-brand-text-primary: var(--text-primary);
+  --color-brand-text-secondary: var(--text-secondary);
+  --color-brand-border: var(--border);
+
+  /* Fonts */
+  --font-heading: var(--font-zilla);
+  --font-sans: var(--font-public-sans);
+
+  /* Radius (Organic & Friendly) */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+
+  /* Shadows */
+  --shadow-warm-sm: var(--shadow-sm);
+  --shadow-warm-md: var(--shadow-md);
+  --shadow-warm-lg: var(--shadow-lg);
+}
+
+:root {
+  --background: #F9F8F6; /* Soft Cream */
+  --foreground: #000000;
+  
+  --primary: #2D6A4F; /* Forest Green */
+  --primary-hover: #1B4332;
+  --secondary: #D4A373; /* Warm Sand / Terracotta */
+  --accent: #E9C46A; /* Sunshine Yellow */
+  
+  --surface: #FFFFFF;
+  --text-primary: #1C2B23; /* Very dark green/gray */
+  --text-secondary: #4A5D53;
+  --border: #E5E0D8; /* Sand */
+
+  --shadow-sm: 0 4px 14px 0 rgba(45, 43, 42, 0.05);
+  --shadow-md: 0 4px 20px -2px rgba(45, 43, 42, 0.08);
+  --shadow-lg: 0 10px 30px -4px rgba(45, 43, 42, 0.12);
+}
+
+.dark {
+  --background: #1A1817; /* Deep Warm Charcoal */
+  --foreground: #F4F1ED;
+  
+  --primary: #E27555;
+  --primary-hover: #F08B6E;
+  --secondary: #3A7561;
+  --accent: #F0B560;
+
+  --surface: #252221;
+  --text-primary: #F4F1ED;
+  --text-secondary: #A6A19E;
+  --border: #383432;
+
+  --shadow-sm: 0 4px 14px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px -4px rgba(0, 0, 0, 0.6);
+}
+
+.ocean {
+  --background: #F0F8FF; /* Alice Blue */
+  --foreground: #001F3F; /* Navy */
+  
+  --primary: #0077B6; /* Deep Ocean Blue */
+  --primary-hover: #023E8A;
+  --secondary: #48CAE4; /* Aqua */
+  --accent: #FFB703; /* Yellow Sun */
+
+  --surface: #FFFFFF;
+  --text-primary: #03045E;
+  --text-secondary: #0077B6;
+  --border: #CAF0F8;
+
+  --shadow-sm: 0 4px 14px 0 rgba(0, 119, 182, 0.08);
+  --shadow-md: 0 4px 20px -2px rgba(0, 119, 182, 0.12);
+  --shadow-lg: 0 10px 30px -4px rgba(0, 119, 182, 0.16);
+}
+
+.sunset {
+  --background: #2E1A29; /* Deep Aubergine */
+  --foreground: #FFF3E3;
+  
+  --primary: #F94144; /* Vibrant Sunset Red-Orange */
+  --primary-hover: #F3722C;
+  --secondary: #F8961E; /* Warm Orange */
+  --accent: #F9C74F; /* Golden Hour Yellow */
+
+  --surface: #43283F; /* Lighter Aubergine */
+  --text-primary: #FFF3E3;
+  --text-secondary: #F8961E;
+  --border: #5A3554;
+
+  --shadow-sm: 0 4px 14px 0 rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 30px -4px rgba(0, 0, 0, 0.5);
+}
+
+.earth {
+  --background: #F4EEDD; /* Sandy Beige */
+  --foreground: #3E2723; /* Dark Clay */
+  
+  --primary: #8D6E63; /* Clay Brown */
+  --primary-hover: #6D4C41;
+  --secondary: #81C784; /* Sage Green */
+  --accent: #E57373; /* Earthy Red */
+
+  --surface: #FFFFFF;
+  --text-primary: #4E342E;
+  --text-secondary: #795548;
+  --border: #D7CCC8;
+
+  --shadow-sm: 0 4px 14px 0 rgba(141, 110, 99, 0.08);
+  --shadow-md: 0 4px 20px -2px rgba(141, 110, 99, 0.12);
+  --shadow-lg: 0 10px 30px -4px rgba(141, 110, 99, 0.16);
+}
+
+body {
+  color: var(--foreground);
+  font-family: var(--font-public-sans), sans-serif;
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(45, 106, 79, 0.08);
+  }
+  .shadow-soft-sm {
+    box-shadow: 0 2px 10px -1px rgba(45, 106, 79, 0.06);
+  }
+  .nature-gradient {
+    background: linear-gradient(135deg, rgba(45,106,79,0.05) 0%, rgba(212,163,115,0.05) 100%);
+  }
+}
+
+.animated-gradient-bg {
+  background-color: var(--background);
+}
