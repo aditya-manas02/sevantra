@@ -168,7 +168,8 @@ export const createEventCategory = async (req: Request, res: Response) => {
   } catch (error: any) {
     // Handle unique constraint failure if category already exists
     if (error.code === 'P2002') {
-       const existing = await prisma.eventCategory.findUnique({ where: { name } });
+       const categoryName = String(name);
+       const existing = await prisma.eventCategory.findUnique({ where: { name: categoryName } });
        return res.status(200).json({ category: existing });
     }
     res.status(500).json({ error: error.message });

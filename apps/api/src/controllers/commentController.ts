@@ -7,7 +7,7 @@ export const getComments = async (req: Request, res: Response) => {
     const comments = await prisma.eventComment.findMany({
       where: { eventId },
       include: {
-        user: { select: { id: true, name: true, avatarUrl: true } }
+        user: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } }
       },
       orderBy: { createdAt: 'desc' }
     });

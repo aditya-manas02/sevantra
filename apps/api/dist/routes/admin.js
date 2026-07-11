@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = require("../controllers/adminController");
+const orgController_1 = require("../controllers/orgController");
+const auth_1 = require("../middleware/auth");
+const admin_1 = require("../middleware/admin");
+const router = (0, express_1.Router)();
+router.get('/stats', auth_1.authMiddleware, admin_1.adminMiddleware, adminController_1.getPlatformStats);
+router.patch('/organizations/:id/verify', auth_1.authMiddleware, admin_1.adminMiddleware, orgController_1.verifyOrganization);
+exports.default = router;
