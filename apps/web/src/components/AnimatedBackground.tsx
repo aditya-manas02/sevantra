@@ -21,6 +21,7 @@ export function AnimatedBackground() {
     const loadVanta = async () => {
       try {
         if (!vantaEffect) {
+          // @ts-expect-error vanta does not have strict types for this path
           const BIRDS = (await import('vanta/dist/vanta.birds.min')).default;
           const effectObj = BIRDS({
             el: vantaRef.current,
