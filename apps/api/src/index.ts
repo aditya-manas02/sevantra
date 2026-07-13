@@ -16,7 +16,7 @@ const port = process.env.PORT || 4000;
 
 app.use(helmet());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://sevantra.vercel.app', 'http://localhost:4000'],
   credentials: true
 }));
 app.use(express.json());
