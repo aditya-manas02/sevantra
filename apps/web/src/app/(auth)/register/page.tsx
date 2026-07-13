@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Heart } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 // ... existing imports ...
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -29,6 +30,18 @@ export default function RegisterPage() {
   });
 
   const [serverError, setServerError] = useState('');
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      setServerError('');
+      const response = await api.post('/auth/google', { token: credentialResponse.credential });
+      setUser(response.data.user);
+      toast.success('Successfully logged in with Google!');
+      router.push('/events');
+    } catch (error: any) {
+      setServerError(error.response?.data?.error || 'Google login failed');
+    }
+  };
 
   const onSubmit = async (data: RegisterInput) => {
     try {
@@ -108,6 +121,33 @@ export default function RegisterPage() {
                 {step === 1 ? 'Enter your details below to get started.' : 'Enter the code sent to your email.'}
               </p>
             </div>
+
+            {step === 1 && (
+              <>
+                <div className="flex justify-center w-full mb-6">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => {
+                      setServerError('Google Login Failed');
+                    }}
+                    useOneTap
+                    theme="outline"
+                    size="large"
+                    shape="rectangular"
+                    width="100%"
+                  />
+                </div>
+
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-[var(--border)]" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-[var(--background)] px-2 text-[var(--text-secondary)]">Or continue with email</span>
+                  </div>
+                </div>
+              </>
+            )}
 
             {step === 1 ? (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

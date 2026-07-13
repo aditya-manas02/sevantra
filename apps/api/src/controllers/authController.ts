@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 import { prisma } from 'database';
 import { RegisterInputSchema, LoginInputSchema } from 'shared';
 import { sendOTP } from '../services/emailService';
+import { OAuth2Client } from 'google-auth-library';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const secret = process.env.JWT_SECRET || 'super-secret-jwt-key-for-local-dev-only';
 
@@ -155,4 +158,76 @@ export const logout = async (req: Request, res: Response) => {
     expires: new Date(0)
   });
   res.status(200).json({ message: 'Logged out successfully' });
+};
+
+export const googleLogin = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ error: 'Token is required' });
+    }
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res.status(400).json({ error: 'Invalid Google token' });
+    }
+
+    const { email, given_name, family_name, picture } = payload;
+    
+    let user = await prisma.user.findUnique({ where: { email } });
+    
+    if (!user) {
+      // Create new user for Google login
+      const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
+      const passwordHash = await bcrypt.hash(randomPassword, 12);
+      
+      user = await prisma.user.create({
+        data: {
+          email,
+          firstName: given_name || 'User',
+          lastName: family_name || '',
+          passwordHash,
+          isEmailVerified: true, // Google emails are already verified
+          avatarUrl: picture,
+        }
+      });
+    } else {
+      // User exists, just ensure they are marked as verified since they logged in with Google
+      if (!user.isEmailVerified) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { isEmailVerified: true }
+        });
+      }
+    }
+
+    // Generate JWT
+    const jwtToken = jwt.sign({ userId: user.id }, secret, { expiresIn: '7d' });
+
+    res.cookie('token', jwtToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.status(200).json({ 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        firstName: user.firstName, 
+        lastName: user.lastName, 
+        role: user.role,
+        avatarUrl: user.avatarUrl
+      } 
+    });
+  } catch (error: any) {
+    console.error('Google login error:', error);
+    res.status(400).json({ error: 'Authentication failed' });
+  }
 };

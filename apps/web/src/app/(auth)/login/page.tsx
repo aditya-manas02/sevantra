@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Heart } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 // ... existing imports ...
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -25,14 +26,27 @@ export default function LoginPage() {
 
   const [serverError, setServerError] = useState('');
 
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      setServerError('');
+      const response = await api.post('/auth/google', { token: credentialResponse.credential });
+      setUser(response.data.user);
+      toast.success('Successfully logged in with Google!');
+      router.push('/events');
+    } catch (error: any) {
+      setServerError(error.response?.data?.error || 'Google login failed');
+    }
+  };
+
   const onSubmit = async (data: LoginInput) => {
     try {
       setServerError('');
       const response = await api.post('/auth/login', data);
       setUser(response.data.user);
+      toast.success('Successfully logged in!');
       router.push('/events');
     } catch (error: any) {
-      const message = error.response?.data?.error || 'Login failed.';
+      const message = error.response?.data?.error || 'Login failed. Please try again.';
       setServerError(message);
     }
   };
@@ -78,6 +92,29 @@ export default function LoginPage() {
               </div>
               <h1 className="text-3xl md:text-4xl font-black font-heading text-[var(--text-primary)]">{t('auth.welcomeBack', 'Welcome Back')}</h1>
               <p className="text-[var(--text-secondary)] font-medium">Please enter your details to sign in.</p>
+            </div>
+
+            <div className="flex justify-center w-full mb-6">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => {
+                  setServerError('Google Login Failed');
+                }}
+                useOneTap
+                theme="outline"
+                size="large"
+                shape="rectangular"
+                width="100%"
+              />
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-[var(--border)]" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-[var(--background)] px-2 text-[var(--text-secondary)]">Or continue with email</span>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

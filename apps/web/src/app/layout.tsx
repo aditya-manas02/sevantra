@@ -31,11 +31,15 @@ import { AuthProvider } from '@/components/AuthProvider';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { I18nProvider } from '@/components/I18nProvider';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+
   return (
     <html
       lang="en"
@@ -47,9 +51,11 @@ export default function RootLayout({
           <AnimatedBackground />
           <QueryProvider>
             <AuthProvider>
-              <I18nProvider>
-                {children}
-              </I18nProvider>
+              <GoogleOAuthProvider clientId={googleClientId}>
+                <I18nProvider>
+                  {children}
+                </I18nProvider>
+              </GoogleOAuthProvider>
             </AuthProvider>
           </QueryProvider>
           <Toaster richColors position="top-center" />
