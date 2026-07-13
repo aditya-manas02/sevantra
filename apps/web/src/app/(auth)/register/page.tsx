@@ -12,7 +12,8 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-
+import { Heart } from 'lucide-react';
+// ... existing imports ...
 export default function RegisterPage() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -62,94 +63,135 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-24 animated-gradient-bg relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-50">
-        <LanguageSwitcher />
-      </div>
-      <div className="w-full max-w-md p-8 glass rounded-xl shadow-warm-md border border-[var(--border)] relative z-10">
-        <h1 className="text-3xl font-bold font-heading text-[var(--text-primary)] mb-6 text-center">
-          {step === 1 ? t('auth.joinSevantra', 'Join Sevantra') : 'Verify Email'}
-        </h1>
+    <div className="flex min-h-screen bg-[var(--background)]">
+      {/* Image Panel */}
+      <div className="hidden lg:flex w-1/2 relative bg-[var(--surface)] overflow-hidden">
+        <img src="/auth-bg.png" alt="Community" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
         
-        {step === 1 ? (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.firstName', 'First Name')}</label>
-                <Input {...register('firstName')} className="bg-[var(--surface)]" />
-                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+        <div className="relative z-20 flex flex-col justify-between h-full p-12 lg:p-24">
+          <Link href="/">
+            <div className="flex items-center gap-3 cursor-pointer group">
+              <div className="w-12 h-12 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/30 group-hover:scale-105 transition-transform">
+                <Heart className="text-white w-7 h-7" />
               </div>
-              <div>
-                <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.lastName', 'Last Name')}</label>
-                <Input {...register('lastName')} className="bg-[var(--surface)]" />
-                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
-              </div>
+              <span className="text-3xl font-black font-heading text-white tracking-tight">Sevantra</span>
             </div>
-
-            <div>
-              <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.email', 'Email Address')}</label>
-              <Input type="email" {...register('email')} className="bg-[var(--surface)]" />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.password', 'Password')}</label>
-              <Input type="password" {...register('password')} className="bg-[var(--surface)]" />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
-            </div>
-
-            <Button type="submit" className="w-full mt-4 bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-orange-500/30" disabled={isSubmitting}>
-              {isSubmitting ? t('auth.registering', 'Registering...') : t('auth.registerButton', 'Register')}
-            </Button>
-          </form>
-        ) : (
-          <form onSubmit={onVerify} className="space-y-4">
-            <p className="text-sm text-[var(--text-secondary)] text-center mb-4">
-              We've sent a 6-digit one-time password to <strong>{registeredEmail}</strong>. Please enter it below to verify your account.
-            </p>
-            <div>
-              <label className="text-sm font-medium text-[var(--text-primary)]">OTP Code</label>
-              <Input 
-                type="text" 
-                value={otp} 
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="123456"
-                maxLength={6}
-                required
-                className="text-center text-lg tracking-widest bg-[var(--surface)]"
-              />
-            </div>
-            <Button type="submit" className="w-full mt-4 bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-orange-500/30" disabled={isVerifying || otp.length < 6}>
-              {isVerifying ? 'Verifying...' : 'Verify Email'}
-            </Button>
-            <div className="text-center mt-2">
-              <button 
-                type="button" 
-                onClick={() => setStep(1)}
-                className="text-sm text-[var(--primary)] hover:underline font-medium"
-              >
-                Use a different email
-              </button>
-            </div>
-          </form>
-        )}
-
-        {serverError && (
-          <div className="mt-4 p-3 rounded-lg bg-[var(--background)]0/10 border border-red-500/20 text-red-500 text-sm text-center">
-            {serverError}
+          </Link>
+          
+          <div className="text-white space-y-6 max-w-lg mb-8">
+            <h2 className="text-5xl font-black font-heading leading-[1.1]">Join the<br/>Movement,<br/>Today.</h2>
+            <p className="text-lg text-white/90 font-medium leading-relaxed">Create an account to start volunteering, discovering local events, and connecting with non-profits in your area.</p>
           </div>
-        )}
-
-        {step === 1 && (
-          <p className="mt-6 text-center text-sm text-[var(--text-secondary)] font-medium">
-            {t('auth.hasAccount', 'Already have an account?')} <Link href="/login" className="text-[var(--primary)] hover:underline font-bold">{t('auth.logInLink', 'Log in')}</Link>
-          </p>
-        )}
+        </div>
       </div>
-      
-      {/* Ambient background blur blobs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--primary)]/20 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--secondary)]/20 rounded-full blur-[120px] pointer-events-none z-0" />
+
+      {/* Form Panel */}
+      <div className="w-full lg:w-1/2 flex flex-col relative">
+        <div className="absolute top-6 right-6 z-50">
+          <LanguageSwitcher />
+        </div>
+        
+        <div className="flex-1 flex items-center justify-center p-8 sm:p-12 lg:p-24">
+          <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="text-center lg:text-left space-y-2 mb-8">
+              <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center">
+                  <Heart className="text-white w-6 h-6" />
+                </div>
+                <span className="text-3xl font-black font-heading text-[var(--text-primary)] tracking-tight">Sevantra</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-black font-heading text-[var(--text-primary)]">
+                {step === 1 ? t('auth.joinSevantra', 'Create Account') : 'Verify Email'}
+              </h1>
+              <p className="text-[var(--text-secondary)] font-medium">
+                {step === 1 ? 'Enter your details below to get started.' : 'Enter the code sent to your email.'}
+              </p>
+            </div>
+
+            {step === 1 ? (
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[var(--text-primary)]">{t('auth.firstName', 'First Name')}</label>
+                    <Input {...register('firstName')} className="bg-[var(--surface)] h-12 text-base px-4 rounded-xl border-[var(--border)] focus:ring-[var(--primary)]" placeholder="John" />
+                    {errors.firstName && <p className="text-red-500 text-sm font-medium">{errors.firstName.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[var(--text-primary)]">{t('auth.lastName', 'Last Name')}</label>
+                    <Input {...register('lastName')} className="bg-[var(--surface)] h-12 text-base px-4 rounded-xl border-[var(--border)] focus:ring-[var(--primary)]" placeholder="Doe" />
+                    {errors.lastName && <p className="text-red-500 text-sm font-medium">{errors.lastName.message}</p>}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[var(--text-primary)]">{t('auth.email', 'Email Address')}</label>
+                  <Input type="email" {...register('email')} className="bg-[var(--surface)] h-12 text-base px-4 rounded-xl border-[var(--border)] focus:ring-[var(--primary)]" placeholder="name@example.com" />
+                  {errors.email && <p className="text-red-500 text-sm font-medium">{errors.email.message}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[var(--text-primary)]">{t('auth.password', 'Password')}</label>
+                  <Input type="password" {...register('password')} className="bg-[var(--surface)] h-12 text-base px-4 rounded-xl border-[var(--border)] focus:ring-[var(--primary)]" placeholder="••••••••" />
+                  {errors.password && <p className="text-red-500 text-sm font-medium">{errors.password.message}</p>}
+                </div>
+
+                <Button type="submit" className="w-full h-14 text-lg mt-4 bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-[var(--primary)]/20 hover:shadow-[var(--primary)]/30 hover:-translate-y-0.5 transition-all font-bold rounded-xl" disabled={isSubmitting}>
+                  {isSubmitting ? t('auth.registering', 'Creating Account...') : t('auth.registerButton', 'Create Account')}
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={onVerify} className="space-y-6">
+                <div className="p-4 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
+                  <p className="text-sm text-[var(--text-secondary)] text-center leading-relaxed">
+                    We've sent a 6-digit one-time password to <br/><strong className="text-[var(--text-primary)]">{registeredEmail}</strong>
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[var(--text-primary)] text-center block">OTP Code</label>
+                  <Input 
+                    type="text" 
+                    value={otp} 
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="123456"
+                    maxLength={6}
+                    required
+                    className="text-center text-2xl tracking-[0.5em] font-mono h-16 bg-[var(--surface)] rounded-xl border-[var(--border)] focus:ring-[var(--primary)] uppercase"
+                  />
+                </div>
+                
+                <Button type="submit" className="w-full h-14 text-lg mt-2 bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-[var(--primary)]/20 hover:shadow-[var(--primary)]/30 hover:-translate-y-0.5 transition-all font-bold rounded-xl" disabled={isVerifying || otp.length < 6}>
+                  {isVerifying ? 'Verifying...' : 'Verify Email'}
+                </Button>
+                
+                <div className="text-center pt-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setStep(1)}
+                    className="text-sm text-[var(--text-secondary)] hover:text-[var(--primary)] hover:underline font-medium transition-colors"
+                  >
+                    Not your email? Change it here
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {serverError && (
+              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm font-bold text-center flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                {serverError}
+              </div>
+            )}
+
+            {step === 1 && (
+              <p className="text-center text-base text-[var(--text-secondary)] font-medium pt-4">
+                {t('auth.hasAccount', 'Already have an account?')} <Link href="/login" className="text-[var(--primary)] hover:text-[var(--primary-hover)] hover:underline font-bold ml-1">{t('auth.logInLink', 'Sign In')}</Link>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
