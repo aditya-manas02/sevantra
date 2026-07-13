@@ -143,5 +143,5 @@ body {
 }
 
 .animated-gradient-bg {
-  background-color: var(--background);
+  background-color: transparent;
 }

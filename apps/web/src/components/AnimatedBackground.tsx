@@ -74,8 +74,7 @@ export function AnimatedBackground() {
         ref={vantaRef} 
         className="w-full h-full"
       />
-      {/* Noise texture overlay for a premium grainy frosted glass look */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.03] dark:opacity-[0.02] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      {/* Noise texture removed to fix 404 error */}
     </div>
   );
 }
