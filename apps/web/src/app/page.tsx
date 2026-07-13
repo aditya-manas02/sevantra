@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Heart, Users, Calendar, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -20,6 +22,14 @@ export default function Home() {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { type: "spring" as const, stiffness: 100 } }
   };
+
+  const { data: stats } = useQuery({
+    queryKey: ['public-stats'],
+    queryFn: async () => {
+      const response = await api.get('/public/stats');
+      return response.data;
+    }
+  });
 
   return (
     <div className="min-h-screen animated-gradient-bg flex flex-col overflow-hidden relative">
@@ -86,9 +96,9 @@ export default function Home() {
         {/* Floating Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-5xl mx-auto w-full relative z-20">
           {[
-            { icon: Users, title: "10,000+", desc: t('landing.activeVolunteers', 'Active Volunteers'), color: "text-blue-500", bg: "bg-[var(--background)]0/10" },
-            { icon: Calendar, title: "500+", desc: t('landing.communityEvents', 'Community Events'), color: "text-green-500", bg: "bg-[var(--background)]0/10" },
-            { icon: MapPin, title: "50+", desc: t('landing.citiesCovered', 'Cities Covered'), color: "text-orange-500", bg: "bg-orange-500/10" }
+            { icon: Users, title: stats?.volunteers ? `${stats.volunteers}+` : "10,000+", desc: t('landing.activeVolunteers', 'Active Volunteers'), color: "text-blue-500", bg: "bg-[var(--background)]0/10" },
+            { icon: Calendar, title: stats?.events ? `${stats.events}+` : "500+", desc: t('landing.communityEvents', 'Community Events'), color: "text-green-500", bg: "bg-[var(--background)]0/10" },
+            { icon: MapPin, title: stats?.cities ? `${stats.cities}+` : "50+", desc: t('landing.citiesCovered', 'Cities Covered'), color: "text-orange-500", bg: "bg-orange-500/10" }
           ].map((stat, i) => (
             <motion.div
               key={i}
