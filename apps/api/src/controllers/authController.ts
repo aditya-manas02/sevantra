@@ -32,7 +32,11 @@ export const register = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ id: user.id }, secret, { expiresIn: '7d' });
     
-    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
+    res.cookie('token', token, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
+    });
     res.status(201).json({ user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role } });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -55,7 +59,11 @@ export const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ id: user.id }, secret, { expiresIn: '7d' });
     
-    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' });
+    res.cookie('token', token, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
+    });
     res.status(200).json({ user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role } });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -71,7 +79,7 @@ export const logout = async (req: Request, res: Response) => {
   res.cookie('token', '', { 
     httpOnly: true, 
     secure: process.env.NODE_ENV === 'production', 
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     expires: new Date(0)
   });
   res.status(200).json({ message: 'Logged out successfully' });
