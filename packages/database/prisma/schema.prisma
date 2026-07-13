@@ -35,6 +35,11 @@ model User {
   phoneNumber  String?
   locationCity String?
   skills       String[]
+  
+  isEmailVerified Boolean @default(false)
+  verificationToken String?
+  verificationTokenExpiresAt DateTime?
+
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   orgMembers   OrgMember[]

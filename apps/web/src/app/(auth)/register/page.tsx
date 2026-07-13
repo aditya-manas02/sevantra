@@ -18,6 +18,11 @@ export default function RegisterPage() {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   
+  const [step, setStep] = useState<1 | 2>(1);
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterInput>({
     resolver: zodResolver(RegisterInputSchema)
   });
@@ -27,12 +32,32 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterInput) => {
     try {
       setServerError('');
-      const response = await api.post('/auth/register', data);
-      setUser(response.data.user);
-      router.push('/events');
+      await api.post('/auth/register', data);
+      setRegisteredEmail(data.email);
+      setStep(2);
+      toast.success('Registration successful. Please check your email for the OTP.');
     } catch (error: any) {
       const message = error.response?.data?.error || 'Registration failed.';
       setServerError(message);
+    }
+  };
+
+  const onVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otp) return;
+    
+    try {
+      setIsVerifying(true);
+      setServerError('');
+      const response = await api.post('/auth/verify-email', { email: registeredEmail, otp });
+      setUser(response.data.user);
+      toast.success('Email verified successfully!');
+      router.push('/events');
+    } catch (error: any) {
+      const message = error.response?.data?.error || 'Verification failed.';
+      setServerError(message);
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -42,48 +67,84 @@ export default function RegisterPage() {
         <LanguageSwitcher />
       </div>
       <div className="w-full max-w-md p-8 bg-[var(--surface)] rounded-xl shadow-warm-md border border-[var(--border)]">
-        <h1 className="text-3xl font-bold font-heading text-[var(--text-primary)] mb-6 text-center">{t('auth.joinSevantra', 'Join Sevantra')}</h1>
+        <h1 className="text-3xl font-bold font-heading text-[var(--text-primary)] mb-6 text-center">
+          {step === 1 ? t('auth.joinSevantra', 'Join Sevantra') : 'Verify Email'}
+        </h1>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        {step === 1 ? (
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.firstName', 'First Name')}</label>
+                <Input {...register('firstName')} />
+                {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+              </div>
+              <div>
+                <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.lastName', 'Last Name')}</label>
+                <Input {...register('lastName')} />
+                {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+              </div>
+            </div>
+
             <div>
-              <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.firstName', 'First Name')}</label>
-              <Input {...register('firstName')} />
-              {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+              <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.email', 'Email Address')}</label>
+              <Input type="email" {...register('email')} />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
+
             <div>
-              <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.lastName', 'Last Name')}</label>
-              <Input {...register('lastName')} />
-              {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+              <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.password', 'Password')}</label>
+              <Input type="password" {...register('password')} />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
             </div>
-          </div>
 
-          <div>
-            <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.email', 'Email Address')}</label>
-            <Input type="email" {...register('email')} />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.password', 'Password')}</label>
-            <Input type="password" {...register('password')} />
-            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
-          </div>
-
-          <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
-            {isSubmitting ? t('auth.registering', 'Registering...') : t('auth.registerButton', 'Register')}
-          </Button>
-
-          {serverError && (
-            <div className="mt-4 p-3 rounded-lg bg-[var(--background)]0/10 border border-red-500/20 text-red-500 text-sm text-center">
-              {serverError}
+            <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
+              {isSubmitting ? t('auth.registering', 'Registering...') : t('auth.registerButton', 'Register')}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={onVerify} className="space-y-4">
+            <p className="text-sm text-[var(--text-secondary)] text-center mb-4">
+              We've sent a 6-digit one-time password to <strong>{registeredEmail}</strong>. Please enter it below to verify your account.
+            </p>
+            <div>
+              <label className="text-sm font-medium text-[var(--text-primary)]">OTP Code</label>
+              <Input 
+                type="text" 
+                value={otp} 
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="123456"
+                maxLength={6}
+                required
+                className="text-center text-lg tracking-widest"
+              />
             </div>
-          )}
-        </form>
+            <Button type="submit" className="w-full mt-4" disabled={isVerifying || otp.length < 6}>
+              {isVerifying ? 'Verifying...' : 'Verify Email'}
+            </Button>
+            <div className="text-center mt-2">
+              <button 
+                type="button" 
+                onClick={() => setStep(1)}
+                className="text-sm text-[var(--primary)] hover:underline"
+              >
+                Use a different email
+              </button>
+            </div>
+          </form>
+        )}
 
-        <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
-          {t('auth.hasAccount', 'Already have an account?')} <Link href="/login" className="text-[var(--primary)] hover:underline">{t('auth.logInLink', 'Log in')}</Link>
-        </p>
+        {serverError && (
+          <div className="mt-4 p-3 rounded-lg bg-[var(--background)]0/10 border border-red-500/20 text-red-500 text-sm text-center">
+            {serverError}
+          </div>
+        )}
+
+        {step === 1 && (
+          <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
+            {t('auth.hasAccount', 'Already have an account?')} <Link href="/login" className="text-[var(--primary)] hover:underline">{t('auth.logInLink', 'Log in')}</Link>
+          </p>
+        )}
       </div>
     </div>
   );
