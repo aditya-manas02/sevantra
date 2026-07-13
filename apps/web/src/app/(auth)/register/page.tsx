@@ -62,11 +62,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-24 bg-[var(--background)] relative">
-      <div className="absolute top-4 right-4">
+    <div className="flex min-h-screen flex-col items-center justify-center p-24 animated-gradient-bg relative overflow-hidden">
+      <div className="absolute top-4 right-4 z-50">
         <LanguageSwitcher />
       </div>
-      <div className="w-full max-w-md p-8 bg-[var(--surface)] rounded-xl shadow-warm-md border border-[var(--border)]">
+      <div className="w-full max-w-md p-8 glass rounded-xl shadow-warm-md border border-[var(--border)] relative z-10">
         <h1 className="text-3xl font-bold font-heading text-[var(--text-primary)] mb-6 text-center">
           {step === 1 ? t('auth.joinSevantra', 'Join Sevantra') : 'Verify Email'}
         </h1>
@@ -76,29 +76,29 @@ export default function RegisterPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.firstName', 'First Name')}</label>
-                <Input {...register('firstName')} />
+                <Input {...register('firstName')} className="bg-[var(--surface)]" />
                 {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
               </div>
               <div>
                 <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.lastName', 'Last Name')}</label>
-                <Input {...register('lastName')} />
+                <Input {...register('lastName')} className="bg-[var(--surface)]" />
                 {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
               </div>
             </div>
 
             <div>
               <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.email', 'Email Address')}</label>
-              <Input type="email" {...register('email')} />
+              <Input type="email" {...register('email')} className="bg-[var(--surface)]" />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
 
             <div>
               <label className="text-sm font-medium text-[var(--text-primary)]">{t('auth.password', 'Password')}</label>
-              <Input type="password" {...register('password')} />
+              <Input type="password" {...register('password')} className="bg-[var(--surface)]" />
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
+            <Button type="submit" className="w-full mt-4 bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-orange-500/30" disabled={isSubmitting}>
               {isSubmitting ? t('auth.registering', 'Registering...') : t('auth.registerButton', 'Register')}
             </Button>
           </form>
@@ -116,17 +116,17 @@ export default function RegisterPage() {
                 placeholder="123456"
                 maxLength={6}
                 required
-                className="text-center text-lg tracking-widest"
+                className="text-center text-lg tracking-widest bg-[var(--surface)]"
               />
             </div>
-            <Button type="submit" className="w-full mt-4" disabled={isVerifying || otp.length < 6}>
+            <Button type="submit" className="w-full mt-4 bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-orange-500/30" disabled={isVerifying || otp.length < 6}>
               {isVerifying ? 'Verifying...' : 'Verify Email'}
             </Button>
             <div className="text-center mt-2">
               <button 
                 type="button" 
                 onClick={() => setStep(1)}
-                className="text-sm text-[var(--primary)] hover:underline"
+                className="text-sm text-[var(--primary)] hover:underline font-medium"
               >
                 Use a different email
               </button>
@@ -141,11 +141,15 @@ export default function RegisterPage() {
         )}
 
         {step === 1 && (
-          <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
-            {t('auth.hasAccount', 'Already have an account?')} <Link href="/login" className="text-[var(--primary)] hover:underline">{t('auth.logInLink', 'Log in')}</Link>
+          <p className="mt-6 text-center text-sm text-[var(--text-secondary)] font-medium">
+            {t('auth.hasAccount', 'Already have an account?')} <Link href="/login" className="text-[var(--primary)] hover:underline font-bold">{t('auth.logInLink', 'Log in')}</Link>
           </p>
         )}
       </div>
+      
+      {/* Ambient background blur blobs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--primary)]/20 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--secondary)]/20 rounded-full blur-[120px] pointer-events-none z-0" />
     </div>
   );
 }
