@@ -110,7 +110,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <span className="text-xl font-bold font-heading text-[var(--primary)]">Sevantra</span>
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
-            <ThemeToggle />
+            <ThemeToggle compact={true} direction="down" />
             <button onClick={handleLogout} className="text-red-500 hover:text-red-600 p-1">
               <LogOut className="w-5 h-5" />
             </button>

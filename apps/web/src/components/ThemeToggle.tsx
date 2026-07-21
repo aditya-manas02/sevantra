@@ -12,7 +12,7 @@ const themes = [
   { name: "Earthy Clay", value: "earth", icon: Leaf, color: "bg-[#F4EEDD] text-[#8D6E63]" },
 ];
 
-export function ThemeToggle() {
+export function ThemeToggle({ direction = 'up', compact = false }: { direction?: 'up' | 'down', compact?: boolean }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -31,7 +31,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="outline" size="icon" className="w-10 h-10 rounded-full glass opacity-50">
+      <Button variant="outline" size="icon" className={`h-11 rounded-xl glass opacity-50 ${compact ? 'w-11' : 'w-full'}`}>
         <Palette className="h-5 w-5" />
       </Button>
     );
@@ -44,16 +44,16 @@ export function ThemeToggle() {
     <div className="relative" ref={dropdownRef}>
       <Button
         variant="outline"
-        className="w-full h-11 rounded-xl glass hover:bg-[var(--surface)] transition-all flex items-center justify-start gap-3 px-4 shadow-sm"
+        className={`h-11 rounded-xl glass hover:bg-[var(--surface)] transition-all flex items-center gap-3 shadow-sm ${compact ? 'w-11 justify-center px-0' : 'w-full justify-start px-4'}`}
         onClick={() => setIsOpen(!isOpen)}
         title="Change Theme"
       >
         <CurrentIcon className="h-5 w-5 text-[var(--primary)] shrink-0" />
-        <span className="font-bold text-sm text-[var(--text-primary)] truncate">{currentThemeObj.name}</span>
+        {!compact && <span className="font-bold text-sm text-[var(--text-primary)] truncate">{currentThemeObj.name}</span>}
       </Button>
 
       {isOpen && (
-        <div className="absolute left-0 bottom-14 mb-2 w-full min-w-[220px] bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-lg p-2 z-[100] animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className={`absolute ${direction === 'up' ? 'left-0 bottom-14 mb-2 slide-in-from-bottom-2' : 'right-0 top-14 mt-2 slide-in-from-top-2'} min-w-[220px] bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-lg p-2 z-[100] animate-in fade-in duration-200`}>
           <p className="text-xs font-bold text-[var(--text-secondary)] px-3 py-2 uppercase tracking-wider mb-1 border-b border-[var(--border)]/50">
             Platform Theme
           </p>
