@@ -134,7 +134,6 @@ export default function RegisterPage() {
                     theme="outline"
                     size="large"
                     shape="rectangular"
-                    width="100%"
                   />
                 </div>
 

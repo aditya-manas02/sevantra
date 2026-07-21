@@ -104,7 +104,6 @@ export default function LoginPage() {
                 theme="outline"
                 size="large"
                 shape="rectangular"
-                width="100%"
               />
             </div>
 

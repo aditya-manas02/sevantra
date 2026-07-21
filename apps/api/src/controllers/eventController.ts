@@ -113,12 +113,12 @@ export const getEvents = async (req: Request, res: Response) => {
         categoryFilter = `AND "categoryId" = '${parsedCategory}'`;
       }
 
-      // Use earthdistance (point <@> point returns miles)
+      // Use native PostgreSQL math functions for distance in miles
       const query = `
         SELECT e.*, 
-               (point(e.longitude, e.latitude) <@> point(${longitude}, ${latitude})) as distance 
+               (3959 * acos(least(1.0, cos(radians(${latitude})) * cos(radians(e.latitude)) * cos(radians(e.longitude) - radians(${longitude})) + sin(radians(${latitude})) * sin(radians(e.latitude))))) as distance 
         FROM "Event" e
-        WHERE (point(e.longitude, e.latitude) <@> point(${longitude}, ${latitude})) <= ${radiusMiles}
+        WHERE (3959 * acos(least(1.0, cos(radians(${latitude})) * cos(radians(e.latitude)) * cos(radians(e.longitude) - radians(${longitude})) + sin(radians(${latitude})) * sin(radians(e.latitude))))) <= ${radiusMiles}
         ${categoryFilter}
         ORDER BY distance ASC
         LIMIT 50;
