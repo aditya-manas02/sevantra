@@ -34,12 +34,12 @@ export default function Home() {
   return (
     <div className="min-h-screen animated-gradient-bg flex flex-col overflow-hidden relative">
       {/* Navbar */}
-      <nav className="glass fixed top-0 w-full z-50 px-8 py-4 flex justify-between items-center">
+      <nav className="glass fixed top-0 w-full z-50 px-4 md:px-8 py-3 md:py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center">
-            <Heart className="text-white w-5 h-5" />
+          <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center">
+            <Heart className="text-white w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <span className="text-2xl font-bold font-heading text-[var(--text-primary)]">Sevantra</span>
+          <span className="text-xl md:text-2xl font-bold font-heading text-[var(--text-primary)]">Sevantra</span>
         </div>
         <div className="flex gap-2 md:gap-4 items-center">
           <LanguageSwitcher />
@@ -66,8 +66,8 @@ export default function Home() {
             {t('landing.elevating', '✨ Elevating Civic Engagement')}
           </motion.div>
           
-          <motion.h1 variants={itemVariants} className="text-5xl md:text-8xl font-black font-heading text-[var(--text-primary)] tracking-tight leading-tight px-2">
-            {t('landing.titleConnect', 'Connect. Act.')} <br className="hidden md:block" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">{t('landing.titleTransform', 'Transform.')}</span>
+          <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black font-heading text-[var(--text-primary)] tracking-tight leading-tight px-2">
+            {t('landing.titleConnect', 'Connect. Act.')} <br className="hidden sm:block" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">{t('landing.titleTransform', 'Transform.')}</span>
           </motion.h1>
           
           <motion.p variants={itemVariants} className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto font-medium px-4">
@@ -94,11 +94,11 @@ export default function Home() {
         </motion.div>
 
         {/* Floating Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 max-w-5xl mx-auto w-full relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 md:mt-24 max-w-5xl mx-auto w-full relative z-20">
           {[
-            { icon: Users, title: stats?.volunteers ? `${stats.volunteers}+` : "10,000+", desc: t('landing.activeVolunteers', 'Active Volunteers'), color: "text-blue-500", bg: "bg-[var(--background)]0/10" },
-            { icon: Calendar, title: stats?.events ? `${stats.events}+` : "500+", desc: t('landing.communityEvents', 'Community Events'), color: "text-green-500", bg: "bg-[var(--background)]0/10" },
-            { icon: MapPin, title: stats?.cities ? `${stats.cities}+` : "50+", desc: t('landing.citiesCovered', 'Cities Covered'), color: "text-orange-500", bg: "bg-orange-500/10" }
+            { icon: Users, title: stats?.volunteers ? `${stats.volunteers}+` : "10,000+", desc: t('landing.activeVolunteers', 'Active Volunteers'), color: "text-blue-500", bg: "bg-blue-500/20" },
+            { icon: Calendar, title: stats?.events ? `${stats.events}+` : "500+", desc: t('landing.communityEvents', 'Community Events'), color: "text-green-500", bg: "bg-green-500/20" },
+            { icon: MapPin, title: stats?.cities ? `${stats.cities}+` : "50+", desc: t('landing.citiesCovered', 'Cities Covered'), color: "text-orange-500", bg: "bg-orange-500/20" }
           ].map((stat, i) => (
             <motion.div
               key={i}

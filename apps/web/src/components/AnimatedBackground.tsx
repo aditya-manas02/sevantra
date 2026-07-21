@@ -6,17 +6,18 @@ import * as THREE from 'three';
 export function AnimatedBackground() {
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
 
   useEffect(() => {
-    if (!theme || !vantaRef.current) return;
+    const currentTheme = theme === 'system' ? resolvedTheme : theme;
+    if (!currentTheme || !vantaRef.current) return;
 
-    const isDarkMode = theme === 'dark' || theme === 'sunset';
+    const isDarkMode = currentTheme === 'dark' || currentTheme === 'sunset';
     const getHexNum = (hex: string) => parseInt(hex.replace('#', '0x'), 16);
 
-    const primaryHex = theme === 'dark' ? '#E27555' : theme === 'ocean' ? '#0077B6' : theme === 'sunset' ? '#F94144' : theme === 'earth' ? '#8D6E63' : '#2D6A4F';
-    const secondaryHex = theme === 'dark' ? '#F4A261' : theme === 'ocean' ? '#48CAE4' : theme === 'sunset' ? '#F8961E' : theme === 'earth' ? '#81C784' : '#52B788';
-    const bgHex = theme === 'dark' ? '#1c1917' : theme === 'sunset' ? '#2e1026' : theme === 'ocean' ? '#F0F8FF' : theme === 'earth' ? '#f5f5dc' : '#f9fbf9';
+    const primaryHex = currentTheme === 'dark' ? '#E27555' : currentTheme === 'ocean' ? '#0077B6' : currentTheme === 'sunset' ? '#F94144' : currentTheme === 'earth' ? '#8D6E63' : '#2D6A4F';
+    const secondaryHex = currentTheme === 'dark' ? '#F4A261' : currentTheme === 'ocean' ? '#48CAE4' : currentTheme === 'sunset' ? '#F8961E' : currentTheme === 'earth' ? '#81C784' : '#52B788';
+    const bgHex = currentTheme === 'dark' ? '#1c1917' : currentTheme === 'sunset' ? '#2e1026' : currentTheme === 'ocean' ? '#F0F8FF' : currentTheme === 'earth' ? '#f5f5dc' : '#f9fbf9';
 
     const loadVanta = async () => {
       try {
@@ -60,7 +61,7 @@ export function AnimatedBackground() {
 
     loadVanta();
 
-  }, [theme, vantaEffect]);
+  }, [theme, resolvedTheme, vantaEffect]);
 
   useEffect(() => {
     return () => {

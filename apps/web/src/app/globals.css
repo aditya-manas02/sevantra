@@ -140,6 +140,11 @@ body {
   .nature-gradient {
     background: linear-gradient(135deg, rgba(45,106,79,0.05) 0%, rgba(212,163,115,0.05) 100%);
   }
+  .glass {
+    background-color: color-mix(in srgb, var(--surface) 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
 
 .animated-gradient-bg {
