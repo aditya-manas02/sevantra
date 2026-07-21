@@ -30,6 +30,7 @@ export default function LoginPage() {
     try {
       setServerError('');
       const response = await api.post('/auth/google', { token: credentialResponse.credential });
+      if (response.data.token) localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
       toast.success('Successfully logged in with Google!');
       router.push('/events');
@@ -42,6 +43,7 @@ export default function LoginPage() {
     try {
       setServerError('');
       const response = await api.post('/auth/login', data);
+      if (response.data.token) localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
       toast.success('Successfully logged in!');
       router.push('/events');

@@ -41,6 +41,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     } catch (e) {
       console.error('Logout API failed', e);
     } finally {
+      if (typeof window !== 'undefined') localStorage.removeItem('token');
       logout();
       router.push('/login');
     }

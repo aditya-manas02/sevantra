@@ -35,6 +35,7 @@ export default function RegisterPage() {
     try {
       setServerError('');
       const response = await api.post('/auth/google', { token: credentialResponse.credential });
+      if (response.data.token) localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
       toast.success('Successfully logged in with Google!');
       router.push('/events');
@@ -64,6 +65,7 @@ export default function RegisterPage() {
       setIsVerifying(true);
       setServerError('');
       const response = await api.post('/auth/verify-email', { email: registeredEmail, otp });
+      if (response.data.token) localStorage.setItem('token', response.data.token);
       setUser(response.data.user);
       toast.success('Email verified successfully!');
       router.push('/events');

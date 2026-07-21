@@ -108,7 +108,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
       secure: process.env.NODE_ENV === 'production', 
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
     });
-    res.status(200).json({ user: { id: updatedUser.id, email: updatedUser.email, firstName: updatedUser.firstName, lastName: updatedUser.lastName, role: updatedUser.role } });
+    res.status(200).json({ token, user: { id: updatedUser.id, email: updatedUser.email, firstName: updatedUser.firstName, lastName: updatedUser.lastName, role: updatedUser.role } });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -139,7 +139,7 @@ export const login = async (req: Request, res: Response) => {
       secure: process.env.NODE_ENV === 'production', 
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
     });
-    res.status(200).json({ user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role } });
+    res.status(200).json({ token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role } });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -217,6 +217,7 @@ export const googleLogin = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({ 
+      token: jwtToken,
       user: { 
         id: user.id, 
         email: user.email, 
