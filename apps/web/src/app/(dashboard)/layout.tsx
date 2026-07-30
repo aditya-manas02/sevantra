@@ -7,6 +7,7 @@ import { LayoutDashboard, Compass, CalendarPlus, Building2, UserCircle, Settings
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { BottomNav } from "@/components/BottomNav";
+import OptionWheel from "@/components/OptionWheel";
 import { useTranslation } from "react-i18next";
 
 const navItems = [
@@ -51,38 +52,53 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   };
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[var(--surface)]/70 backdrop-blur-xl border border-[var(--border)] rounded-3xl p-6 relative z-50 shadow-lg shadow-[var(--primary)]/5">
-      <div className="flex items-center gap-3 mb-10 pb-6 border-b border-[var(--border)]">
-        <div className="w-10 h-10 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-soft-sm">
-          <span className="text-white font-bold text-xl">S</span>
+  const SidebarContent = () => {
+    const initialIndex = filteredNavItems.findIndex(item => 
+      item.href === '/events' 
+        ? pathname === '/events' 
+        : pathname === item.href || pathname.startsWith(`${item.href}/`)
+    );
+    const defaultSelected = initialIndex >= 0 ? initialIndex : 0;
+
+    const wheelItems = filteredNavItems.map(item => (
+      <React.Fragment key={item.href}>
+        <item.icon className="w-5 h-5 shrink-0" />
+        <span>{t(`sidebar.${item.key}`, item.fallback)}</span>
+      </React.Fragment>
+    ));
+
+    return (
+      <div className="flex flex-col h-full bg-[var(--surface)]/70 backdrop-blur-xl border border-[var(--border)] rounded-3xl p-6 relative z-50 shadow-lg shadow-[var(--primary)]/5 overflow-hidden">
+        <div className="flex items-center gap-3 mb-4 pb-6 border-b border-[var(--border)] relative z-10">
+          <div className="w-10 h-10 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-soft-sm shrink-0">
+            <span className="text-white font-bold text-xl">S</span>
+          </div>
+          <span className="text-2xl font-black font-heading tracking-tight text-[var(--primary)]">Sevantra</span>
         </div>
-        <span className="text-2xl font-black font-heading tracking-tight text-[var(--primary)]">Sevantra</span>
-      </div>
 
-      <nav className="flex-1 space-y-2">
-        {filteredNavItems.map((item) => {
-          const isActive = 
-            item.href === '/events' 
-              ? pathname === '/events' 
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
-          
-          return (
-            <Link key={item.href} href={item.href}>
-              <motion.div 
-                whileHover={{ x: 5 }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-[var(--radius-md)] transition-all relative overflow-hidden group ${isActive ? 'bg-[var(--primary)]/10 text-[var(--primary)] font-bold shadow-sm' : 'text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5'}`}
-              >
-                {isActive && <motion.div layoutId="sidebar-active" className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--primary)] rounded-r-full" />}
-                <item.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-[var(--primary)]' : 'group-hover:text-[var(--primary)]'}`} />
-                <span className="font-semibold text-sm relative z-10">{t(`sidebar.${item.key}`, item.fallback)}</span>
-              </motion.div>
-            </Link>
-          );
-        })}
-      </nav>
+        <div className="flex-1 w-[150%] h-full relative -left-8 py-4">
+          <OptionWheel
+            items={wheelItems}
+            defaultSelected={defaultSelected}
+            onChange={(idx) => {
+              const selected = filteredNavItems[idx];
+              if (selected && selected.href !== pathname) {
+                router.push(selected.href);
+              }
+            }}
+            textColor="var(--text-secondary)"
+            activeColor="var(--primary)"
+            side="left"
+            fontSize={1}
+            spacing={3.5}
+            curve={1}
+            tilt={6}
+            inset={40}
+            draggable={true}
+          />
+        </div>
 
-      <div className="mt-auto pt-6 flex flex-col gap-4">
+        <div className="mt-auto pt-6 flex flex-col gap-4 relative z-10 bg-gradient-to-t from-[var(--surface)] via-[var(--surface)] to-transparent pb-2">
         <div className="flex items-center justify-between border-t border-[var(--border)] pt-4">
           <LanguageSwitcher />
         </div>
@@ -99,6 +115,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     </div>
   );
+  };
 
   return (
     <div className="flex h-screen bg-transparent overflow-hidden font-sans selection:bg-[var(--primary)] selection:text-white">
