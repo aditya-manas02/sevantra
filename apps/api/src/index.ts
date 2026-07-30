@@ -11,6 +11,9 @@ import commentRoutes from './routes/comment';
 import adminRoutes from './routes/admin';
 import donationRoutes from './routes/donation';
 import publicRoutes from './routes/public';
+import teamRoutes from './routes/team';
+import feedRoutes from './routes/feed';
+import messageRoutes from './routes/message';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -32,6 +35,9 @@ app.use('/api/community', commentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/public', publicRoutes);
+app.use('/api/teams', teamRoutes);
+app.use('/api/feed', feedRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'sevantra-api' });
