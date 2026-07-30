@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { QrCode, CheckCircle, XCircle, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { CustomSelect } from '@/components/CustomSelect'; // Ensure you have a CustomSelect or use standard select
 import { useRouter } from 'next/navigation';
 
 export default function ScanPage() {
