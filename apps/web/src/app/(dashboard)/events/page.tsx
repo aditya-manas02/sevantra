@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import EventDiscoveryMapDynamic from '@/components/EventDiscoveryMapDynamic';
@@ -7,6 +7,26 @@ import { Input } from '@/components/ui/input';
 import { Leaf, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+function DonationToast() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const donationStatus = searchParams.get('donation');
+    if (donationStatus === 'success') {
+      toast.success('Donation successful! Thank you for your support.', { duration: 5000 });
+      router.replace('/events');
+    } else if (donationStatus === 'canceled') {
+      toast.error('Donation canceled.');
+      router.replace('/events');
+    }
+  }, [searchParams, router]);
+
+  return null;
+}
 
 export default function EventDiscoveryPage() {
   const { t } = useTranslation();
@@ -33,6 +53,9 @@ export default function EventDiscoveryPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 bg-transparent min-h-screen">
+      <Suspense fallback={null}>
+        <DonationToast />
+      </Suspense>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-[var(--border)] relative">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
         <div className="relative z-10">

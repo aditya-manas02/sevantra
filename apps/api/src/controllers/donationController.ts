@@ -34,7 +34,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         }
       });
       // Mock redirect URL to success page
-      return res.status(200).json({ url: `http://localhost:3000/dashboard?donation=success` });
+      return res.status(200).json({ url: `http://localhost:3000/events?donation=success` });
     }
 
     // Real Stripe Flow
@@ -53,8 +53,8 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         },
       ],
       mode: 'payment',
-      success_url: `http://localhost:3000/dashboard?donation=success`,
-      cancel_url: `http://localhost:3000/dashboard?donation=canceled`,
+      success_url: `http://localhost:3000/events?donation=success`,
+      cancel_url: `http://localhost:3000/events?donation=canceled`,
       metadata: {
         userId,
         eventId: eventId || '',

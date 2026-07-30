@@ -5,59 +5,101 @@ import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Calendar, MapPin, Users, HeartHandshake, ArrowRight, MessageCircle, QrCode, Download } from 'lucide-react';
+import { Calendar, MapPin, Users, HeartHandshake, ArrowRight, MessageCircle, QrCode, Download, Share2, Twitter, Facebook } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { jsPDF } from 'jspdf';
+import { EventTicket } from '@/components/EventTicket';
 
 function DonationWidget({ event }: { event: any }) {
   const [amount, setAmount] = React.useState<number | string>(event.minDonationAmount || 100);
   const [showQR, setShowQR] = React.useState(false);
+  const [isStripeLoading, setIsStripeLoading] = React.useState(false);
   
   if (!event.acceptsDonations || !event.upiId) return null;
 
   const upiLink = `upi://pay?pa=${event.upiId}&pn=${encodeURIComponent(event.organization.name)}&am=${amount}&cu=INR`;
 
+  const handleStripeCheckout = async () => {
+    const numAmount = Number(amount);
+    if (event.minDonationAmount && numAmount < event.minDonationAmount) {
+      return toast.error(`Minimum donation is ₹${event.minDonationAmount}`);
+    }
+    if (numAmount <= 0) return toast.error('Enter a valid amount');
+    
+    setIsStripeLoading(true);
+    try {
+      const res = await api.post('/donations/checkout', {
+        amount: numAmount,
+        eventId: event.id
+      });
+      if (res.data.url) {
+        window.location.href = res.data.url;
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Failed to initialize checkout');
+      setIsStripeLoading(false);
+    }
+  };
+
   return (
-    <div className="flex-1 min-w-[250px] bg-[var(--surface)] border border-[var(--border)] p-4 rounded-2xl shadow-soft">
+    <div className="flex-1 min-w-[250px] bg-[var(--surface)] border border-[var(--border)] p-5 rounded-2xl shadow-soft">
       {!showQR ? (
-        <div className="space-y-3">
-          <p className="text-sm font-bold text-[var(--text-primary)]">Support this event</p>
+        <div className="space-y-4">
+          <p className="text-sm font-bold text-[var(--text-primary)] mb-2 flex items-center justify-between">
+            Support this event
+            <span className="text-xs font-medium text-[var(--text-secondary)] bg-[var(--background)] px-2 py-1 rounded-md">Tax Deductible</span>
+          </p>
           <div className="flex items-center gap-2">
             <span className="text-lg font-bold">₹</span>
             <input 
               type="number"
               value={amount}
               onChange={e => setAmount(e.target.value)}
-              className="w-full p-2 border border-[var(--border)] rounded-lg font-mono focus:ring-2 focus:ring-[var(--primary)] outline-none"
+              className="w-full p-3 border border-[var(--border)] rounded-xl font-mono focus:ring-2 focus:ring-[var(--primary)] outline-none transition-all"
               min={event.minDonationAmount || 1}
             />
           </div>
-          <Button 
-            className="w-full bg-[var(--secondary)] hover:bg-[#B58B60] text-white font-bold"
-            onClick={() => {
-              const numAmount = Number(amount);
-              if (event.minDonationAmount && numAmount < event.minDonationAmount) {
-                return toast.error(`Minimum donation is ₹${event.minDonationAmount}`);
-              }
-              if (numAmount <= 0) return toast.error('Enter a valid amount');
-              
-              if (typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                window.location.href = upiLink;
-              } else {
-                setShowQR(true);
-              }
-            }}
-          >
-            Donate via UPI
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button 
+              className="w-full bg-[var(--secondary)] hover:bg-[#B58B60] text-white font-bold h-12"
+              onClick={() => {
+                const numAmount = Number(amount);
+                if (event.minDonationAmount && numAmount < event.minDonationAmount) {
+                  return toast.error(`Minimum donation is ₹${event.minDonationAmount}`);
+                }
+                if (numAmount <= 0) return toast.error('Enter a valid amount');
+                
+                if (typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                  window.location.href = upiLink;
+                } else {
+                  setShowQR(true);
+                }
+              }}
+            >
+              Donate via UPI
+            </Button>
+            <Button 
+              variant="outline"
+              className="w-full font-bold h-12 flex items-center gap-2 border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--background)]"
+              onClick={handleStripeCheckout}
+              disabled={isStripeLoading}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 10H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7 15H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              {isStripeLoading ? 'Processing...' : 'Pay with Card'}
+            </Button>
+          </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-xs font-bold text-[var(--text-secondary)]">Scan with any UPI App</p>
-          <div className="p-2 bg-[var(--surface)] rounded-xl border border-[var(--border)]">
-            <QRCodeSVG value={upiLink} size={130} />
+        <div className="flex flex-col items-center gap-3 py-2">
+          <p className="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">Scan with any UPI App</p>
+          <div className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100">
+            <QRCodeSVG value={upiLink} size={150} level="M" />
           </div>
-          <Button variant="outline" size="sm" onClick={() => setShowQR(false)} className="w-full">
+          <Button variant="outline" onClick={() => setShowQR(false)} className="w-full mt-2 font-bold h-11">
             Change Amount
           </Button>
         </div>
@@ -240,49 +282,43 @@ export default function EventDetailPage() {
         <div className="flex gap-4 flex-wrap relative z-10">
           {registration ? (
             <div className="w-full">
-              {registration.status === 'CHECKED_IN' ? (
-                <div className="bg-[var(--background)] border border-green-200 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-green-800 flex items-center gap-2"><QrCode className="w-6 h-6" /> You're checked in!</h3>
-                    <p className="text-green-700 font-medium text-sm mt-1">Thank you for participating and making an impact.</p>
-                  </div>
-                  {event.providesCertificate && (
-                    <Button onClick={downloadCertificate} className="bg-green-700 hover:bg-green-800 text-white shadow-soft shrink-0 py-6 px-6 font-bold flex items-center gap-2">
-                      <Download className="w-5 h-5" /> Download Certificate
-                    </Button>
-                  )}
-                </div>
-              ) : (
-                <div className="bg-[var(--surface)] border border-[var(--border)] p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
-                  <div>
-                    <h3 className="text-xl font-bold text-[var(--text-primary)]">Your Registration Ticket</h3>
-                    <p className="text-[var(--text-secondary)] font-medium text-sm mt-1">Show this QR code to the organizer when you arrive to check in.</p>
-                  </div>
-                  {isWithin24Hours ? (
-                    registration.checkInToken ? (
-                      <div className="bg-[var(--surface)] p-4 rounded-xl shadow-soft shrink-0 border border-[var(--border)] flex flex-col items-center gap-3">
-                        <QRCodeSVG value={registration.checkInToken} size={120} />
-                        <div className="text-center">
-                          <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-1">Ticket Code</p>
-                          <p className="text-lg font-mono font-black text-[var(--text-primary)] tracking-widest">
-                            {registration.checkInToken.split('-')[0].toUpperCase()}
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-sm font-bold text-red-500">Error generating ticket.</p>
-                    )
-                  ) : (
-                    <div className="bg-[var(--background)] p-6 rounded-xl shadow-inner shrink-0 border border-[var(--border)] border-dashed flex flex-col items-center justify-center gap-2 text-center h-[160px] w-[160px]">
-                      <div className="w-10 h-10 bg-[var(--surface)] border border-[var(--border)] rounded-full flex items-center justify-center mb-1">
-                        <span className="text-xl">🔒</span>
-                      </div>
-                      <p className="text-xs font-bold text-[var(--text-primary)]">Ticket Locked</p>
-                      <p className="text-[10px] text-[var(--text-secondary)] font-medium leading-tight">Reveals 24 hours prior to event.</p>
-                    </div>
-                  )}
+              {registration.status === 'CHECKED_IN' && event.providesCertificate && (
+                <div className="mb-6 flex justify-center">
+                  <Button onClick={downloadCertificate} className="bg-green-700 hover:bg-green-800 text-white shadow-soft py-6 px-6 font-bold flex items-center gap-2 rounded-2xl w-full max-w-sm">
+                    <Download className="w-5 h-5" /> Download Certificate
+                  </Button>
                 </div>
               )}
+              <EventTicket event={event} registration={registration} />
+              
+              <div className="mt-6 p-6 bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-soft">
+                <h4 className="text-center font-bold text-[var(--text-primary)] mb-4 flex items-center justify-center gap-2">
+                  <Share2 className="w-4 h-4" /> Share your Impact
+                </h4>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Button 
+                    variant="outline" 
+                    className="w-full sm:w-auto bg-[#1DA1F2]/10 text-[#1DA1F2] border-[#1DA1F2]/20 hover:bg-[#1DA1F2] hover:text-white flex items-center gap-2"
+                    onClick={() => {
+                      const ogUrl = `${window.location.origin}/api/og?title=${encodeURIComponent(event.title)}&location=${encodeURIComponent(event.locationName)}&date=${encodeURIComponent(new Date(event.startDate).toLocaleDateString())}&type=registered`;
+                      const tweetText = `I just registered for ${event.title}! Join me in making an impact on Sevantra.`;
+                      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+                    }}
+                  >
+                    <Twitter className="w-4 h-4" /> Share on X
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full sm:w-auto bg-[#1877F2]/10 text-[#1877F2] border-[#1877F2]/20 hover:bg-[#1877F2] hover:text-white flex items-center gap-2"
+                    onClick={() => {
+                      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+                    }}
+                  >
+                    <Facebook className="w-4 h-4" /> Share on Facebook
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : (
             <Button 
