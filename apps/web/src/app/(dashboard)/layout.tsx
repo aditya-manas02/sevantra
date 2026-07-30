@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     ));
 
     return (
-      <div className="flex flex-col h-full bg-[var(--surface)]/70 backdrop-blur-xl border border-[var(--border)] rounded-3xl p-6 relative z-50 shadow-lg shadow-[var(--primary)]/5 overflow-hidden">
+      <div className="flex flex-col h-full bg-transparent p-6 relative z-50 overflow-hidden">
         <div className="flex items-center gap-3 mb-4 pb-6 border-b border-[var(--border)] relative z-10">
           <div className="w-10 h-10 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-soft-sm shrink-0">
             <span className="text-white font-bold text-xl">S</span>
@@ -98,7 +98,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           />
         </div>
 
-        <div className="mt-auto pt-6 flex flex-col gap-4 relative z-10 bg-gradient-to-t from-[var(--surface)] via-[var(--surface)] to-transparent pb-2">
+        <div className="mt-auto pt-6 flex flex-col gap-4 relative z-10 pb-2">
         <div className="flex items-center justify-between border-t border-[var(--border)] pt-4">
           <LanguageSwitcher />
         </div>

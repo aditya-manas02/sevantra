@@ -181,10 +181,11 @@ const OptionWheel = ({
       e.preventDefault();
       const cfg = cfgRef.current;
       const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
-      const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
+      // Drastically reduce sensitivity so each mouse wheel tick doesn't jump multiple items
+      const step = Math.max(-0.5, Math.min(0.5, (delta / cfg.rowH) * 0.15));
       applyTarget(targetRef.current + step, false);
       if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
-      wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 140);
+      wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 250);
     };
     el.addEventListener('wheel', onWheel, { passive: false });
     return () => {
