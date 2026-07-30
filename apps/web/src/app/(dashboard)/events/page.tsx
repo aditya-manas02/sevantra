@@ -42,14 +42,17 @@ export default function EventDiscoveryPage() {
           </h1>
           <p className="text-[var(--text-secondary)] mt-3 text-lg font-medium">{t('events.discoverSubtitle', 'Find ways to give back to nature and your community.')}</p>
         </div>
-        <div className="flex items-center gap-4 bg-[var(--surface)] p-4 rounded-2xl border border-[var(--border)] shadow-soft-sm relative z-10">
-          <label className="text-sm font-bold text-[var(--text-primary)]">{t('events.searchArea', 'Search Area (Miles)')}</label>
-          <Input 
-            type="number" 
-            className="w-24 text-center font-bold" 
-            value={radius} 
-            onChange={(e) => setRadius(Number(e.target.value))} 
-          />
+        <div className="flex items-center gap-3 bg-[var(--surface)]/80 backdrop-blur-md px-6 py-3 rounded-full border border-[var(--border)] shadow-soft relative z-10">
+          <label className="text-sm font-bold text-[var(--text-secondary)] whitespace-nowrap">{t('events.searchArea', 'Within')}</label>
+          <div className="flex items-center bg-[var(--background)] rounded-full px-3 py-1">
+            <Input 
+              type="number" 
+              className="w-16 text-center font-bold text-[var(--text-primary)] bg-transparent border-none p-0 h-8 focus-visible:ring-0 shadow-none" 
+              value={radius} 
+              onChange={(e) => setRadius(Number(e.target.value))} 
+            />
+            <span className="text-sm font-bold text-[var(--text-secondary)] ml-1">{t('events.miles', 'miles')}</span>
+          </div>
         </div>
       </div>
 
@@ -63,20 +66,28 @@ export default function EventDiscoveryPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events?.map((event: any) => (
                 <Link key={event.id} href={`/events/${event.id}`} className="block group">
-                  <div className="p-6 h-full bg-[var(--surface)] rounded-3xl border border-[var(--border)] shadow-soft hover:shadow-lg transition-all flex flex-col relative overflow-hidden transform hover:-translate-y-1">
-                    <div className="absolute top-0 left-0 w-full h-2 nature-gradient opacity-80" />
-                    <h3 className="font-black font-heading text-2xl text-[var(--text-primary)] mb-3 leading-tight mt-2 line-clamp-2 group-hover:text-[var(--primary)] transition-colors">{event.title}</h3>
-                    <p className="text-sm font-medium text-[var(--text-secondary)] mb-6 flex-1 flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-[var(--secondary)] shrink-0 mt-0.5" />
-                      {event.locationName}
-                    </p>
-                    <div className="flex justify-between items-center mt-auto pt-5 border-t border-[var(--border)]/50">
-                      <div className="text-xs font-bold text-[var(--primary)] bg-[var(--primary)]/10 px-3 py-1.5 rounded-full">
-                        {new Date(event.startDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                  <div className="p-6 h-full bg-[var(--surface)] rounded-3xl border border-[var(--border)] shadow-soft hover:shadow-xl transition-all duration-500 flex flex-col relative overflow-hidden group/card transform hover:-translate-y-2">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] opacity-80 group-hover/card:h-full group-hover/card:opacity-[0.03] transition-all duration-500 z-0" />
+                    <div className="relative z-10 flex flex-col h-full">
+                      <h3 className="font-black font-heading text-2xl text-[var(--text-primary)] mb-3 leading-tight mt-2 line-clamp-2 group-hover/card:text-[var(--primary)] transition-colors">{event.title}</h3>
+                      <p className="text-sm font-medium text-[var(--text-secondary)] mb-6 flex-1 flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-[var(--secondary)] shrink-0 mt-0.5" />
+                        {event.locationName}
+                      </p>
+                      <div className="flex justify-between items-center mt-auto pt-5 border-t border-[var(--border)]/50 group-hover/card:border-transparent transition-colors">
+                        <div className="text-xs font-bold text-[var(--primary)] bg-[var(--primary)]/10 px-3 py-1.5 rounded-full">
+                          {new Date(event.startDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </div>
+                        {event.distance !== undefined && (
+                          <p className="text-xs font-bold text-[var(--secondary)]">{event.distance.toFixed(1)} {t('events.milesAway', 'miles away')}</p>
+                        )}
                       </div>
-                      {event.distance !== undefined && (
-                        <p className="text-xs font-bold text-[var(--secondary)]">{event.distance.toFixed(1)} {t('events.milesAway', 'miles away')}</p>
-                      )}
+                    </div>
+                    {/* Hover button overlay */}
+                    <div className="absolute bottom-6 right-6 opacity-0 group-hover/card:opacity-100 transform translate-y-4 group-hover/card:translate-y-0 transition-all duration-500 z-20">
+                      <div className="bg-[var(--primary)] text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg shadow-[var(--primary)]/30">
+                        {t('events.viewDetails', 'View Details')}
+                      </div>
                     </div>
                   </div>
                 </Link>

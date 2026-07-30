@@ -62,8 +62,9 @@ export default function Home() {
           animate="visible"
           className="max-w-4xl mx-auto space-y-8"
         >
-          <motion.div variants={itemVariants} className="inline-block px-4 py-1.5 rounded-full glass border border-[var(--primary)] text-[var(--primary)] font-medium text-xs md:text-sm mb-4">
-            {t('landing.elevating', '✨ Elevating Civic Engagement')}
+          <motion.div variants={itemVariants} className="inline-block px-4 py-1.5 rounded-full glass border border-[var(--primary)] text-[var(--primary)] font-medium text-xs md:text-sm mb-4 relative overflow-hidden group cursor-default">
+            <span className="relative z-10">{t('landing.elevating', '✨ Elevating Civic Engagement')}</span>
+            <div className="absolute inset-0 bg-[var(--primary)]/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           </motion.div>
           
           <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black font-heading text-[var(--text-primary)] tracking-tight leading-tight px-2">
@@ -108,18 +109,37 @@ export default function Home() {
               whileHover={{ y: -10, scale: 1.02 }}
               className="glass p-8 rounded-2xl shadow-warm-md text-left border border-[var(--border)] relative overflow-hidden group cursor-pointer"
             >
-              <div className={`absolute top-0 right-0 w-32 h-32 ${stat.bg} rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150`} />
-              <stat.icon className={`w-10 h-10 ${stat.color} mb-4`} />
-              <h3 className="text-3xl font-black font-heading text-[var(--text-primary)]">{stat.title}</h3>
-              <p className="text-[var(--text-secondary)] font-medium">{stat.desc}</p>
+              <div className={`absolute top-0 right-0 w-32 h-32 ${stat.bg} rounded-full blur-3xl -mr-10 -mt-10 transition-transform duration-500 group-hover:scale-[2]`} />
+              <stat.icon className={`w-10 h-10 ${stat.color} mb-4 relative z-10 group-hover:scale-110 transition-transform`} />
+              <h3 className="text-3xl font-black font-heading text-[var(--text-primary)] relative z-10">{stat.title}</h3>
+              <p className="text-[var(--text-secondary)] font-medium relative z-10">{stat.desc}</p>
             </motion.div>
           ))}
         </div>
       </main>
       
       {/* Ambient background blur blobs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--primary)]/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--secondary)]/20 rounded-full blur-[120px] pointer-events-none" />
+      {/* Ambient background blur blobs */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+          x: [0, 50, 0],
+          y: [0, 30, 0]
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--primary)]/30 rounded-full blur-[120px] pointer-events-none" 
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0.6, 0.3],
+          x: [0, -40, 0],
+          y: [0, -50, 0]
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--secondary)]/30 rounded-full blur-[120px] pointer-events-none" 
+      />
     </div>
   );
 }

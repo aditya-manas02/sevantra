@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[var(--surface)]/60 backdrop-blur-xl border-r border-[var(--border)] p-6 relative z-50">
+    <div className="flex flex-col h-full bg-[var(--surface)]/70 backdrop-blur-xl border border-[var(--border)] rounded-3xl p-6 relative z-50 shadow-lg shadow-[var(--primary)]/5">
       <div className="flex items-center gap-3 mb-10 pb-6 border-b border-[var(--border)]">
         <div className="w-10 h-10 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-soft-sm">
           <span className="text-white font-bold text-xl">S</span>
@@ -67,10 +67,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Link key={item.href} href={item.href}>
               <motion.div 
                 whileHover={{ x: 5 }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-[var(--radius-md)] transition-all relative overflow-hidden group ${isActive ? 'bg-[var(--primary)]/10 text-[var(--primary)] font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5'}`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-[var(--radius-md)] transition-all relative overflow-hidden group ${isActive ? 'bg-[var(--primary)]/10 text-[var(--primary)] font-bold shadow-sm' : 'text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5'}`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? 'text-[var(--primary)]' : 'group-hover:text-[var(--primary)]'}`} />
-                <span className="font-semibold text-sm">{t(`sidebar.${item.key}`, item.fallback)}</span>
+                {isActive && <motion.div layoutId="sidebar-active" className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--primary)] rounded-r-full" />}
+                <item.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-[var(--primary)]' : 'group-hover:text-[var(--primary)]'}`} />
+                <span className="font-semibold text-sm relative z-10">{t(`sidebar.${item.key}`, item.fallback)}</span>
               </motion.div>
             </Link>
           );
@@ -98,7 +99,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex h-screen bg-transparent overflow-hidden font-sans selection:bg-[var(--primary)] selection:text-white">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-72 h-full z-40">
+      <div className="hidden md:block w-[300px] h-screen z-40 p-4">
         <SidebarContent />
       </div>
 
