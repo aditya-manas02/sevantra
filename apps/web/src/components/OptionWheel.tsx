@@ -185,7 +185,7 @@ const OptionWheel = ({
       const step = Math.max(-0.5, Math.min(0.5, (delta / cfg.rowH) * 0.15));
       applyTarget(targetRef.current + step, false);
       if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
-      wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 250);
+      wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 100);
     };
     el.addEventListener('wheel', onWheel, { passive: false });
     return () => {

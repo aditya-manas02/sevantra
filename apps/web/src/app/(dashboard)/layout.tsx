@@ -94,6 +94,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             curve={1}
             tilt={6}
             inset={40}
+            smoothing={60}
             draggable={true}
           />
         </div>
