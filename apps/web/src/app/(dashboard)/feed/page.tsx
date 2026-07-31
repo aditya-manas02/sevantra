@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
+import { useTranslation } from 'react-i18next';
+
 export default function FeedPage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [content, setContent] = useState('');
   const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -23,7 +26,7 @@ export default function FeedPage() {
     onSuccess: () => {
       setContent('');
       setImageBase64(null);
-      toast.success('Posted successfully!');
+      toast.success(t('feedPage.postedSuccess', 'Posted successfully!'));
       queryClient.invalidateQueries({ queryKey: ['community-feed'] });
     },
     onError: (err: any) => toast.error(err.response?.data?.error || 'Failed to post')
@@ -55,8 +58,8 @@ export default function FeedPage() {
         <div className="w-16 h-16 bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] rounded-2xl mx-auto flex items-center justify-center mb-2 shadow-soft">
           <Sparkles className="w-8 h-8 text-white" />
         </div>
-        <h1 className="text-4xl font-black font-heading text-[var(--text-primary)]">Community Feed</h1>
-        <p className="text-[var(--text-secondary)] font-medium">Share your impact stories, photos, and inspire others!</p>
+        <h1 className="text-4xl font-black font-heading text-[var(--text-primary)]">{t('feedPage.title', 'Community Feed')}</h1>
+        <p className="text-[var(--text-secondary)] font-medium">{t('feedPage.subtitle', 'Share your impact stories, photos, and inspire others!')}</p>
       </div>
 
       <div className="bg-[var(--surface)] p-6 rounded-3xl shadow-soft border border-[var(--border)]">

@@ -15,6 +15,8 @@ i18n
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'hi'],
+    load: 'languageOnly',
+    nonExplicitSupportedLngs: true,
     interpolation: {
       escapeValue: false // react already safes from xss
     },

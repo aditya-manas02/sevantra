@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
+import { useTranslation } from 'react-i18next';
+
 export default function TeamsPage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
   const [newTeamName, setNewTeamName] = useState('');
@@ -27,7 +30,7 @@ export default function TeamsPage() {
   const createTeam = useMutation({
     mutationFn: async () => api.post('/teams', { name: newTeamName, description: newTeamDesc }),
     onSuccess: () => {
-      toast.success('Team created successfully!');
+      toast.success(t('teamsPage.createSuccess', 'Team created successfully!'));
       setIsCreating(false);
       setNewTeamName('');
       setNewTeamDesc('');
@@ -40,7 +43,7 @@ export default function TeamsPage() {
   const joinTeam = useMutation({
     mutationFn: async (teamId: string) => api.post('/teams/join', { teamId }),
     onSuccess: () => {
-      toast.success('Joined team successfully!');
+      toast.success(t('teamsPage.joinSuccess', 'Joined team successfully!'));
       queryClient.invalidateQueries({ queryKey: ['my-teams'] });
       queryClient.invalidateQueries({ queryKey: ['teams-leaderboard'] });
     },
@@ -58,12 +61,12 @@ export default function TeamsPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl font-black font-heading text-[var(--primary)] flex items-center gap-3">
-            <Trophy className="w-8 h-8 text-[var(--secondary)]" /> Corporate Teams
+            <Trophy className="w-8 h-8 text-[var(--secondary)]" /> {t('teamsPage.title', 'Corporate & Group Teams')}
           </h1>
-          <p className="text-[var(--text-secondary)] mt-2 font-medium">Join your company or university team and climb the CSR Leaderboard.</p>
+          <p className="text-[var(--text-secondary)] mt-2 font-medium">{t('teamsPage.subtitle', 'Compete on the CSR Leaderboard, track impact, and achieve group goals.')}</p>
         </div>
         <Button onClick={() => setIsCreating(true)} className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white font-bold rounded-xl shadow-soft">
-          <Plus className="w-5 h-5 mr-2" /> Create New Team
+          <Plus className="w-5 h-5 mr-2" /> {t('teamsPage.createTeam', 'Create Team')}
         </Button>
       </div>
 

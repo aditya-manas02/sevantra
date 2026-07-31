@@ -1,10 +1,15 @@
 {
   "sidebar": {
+    "adminDashboard": "Admin Dashboard",
+    "feed": "Community Feed",
+    "teams": "Corporate Teams",
+    "messages": "Messages",
     "discoverEvents": "Discover Events",
     "createEvent": "Create Event",
     "manageEvents": "Manage Events",
     "organizations": "Organizations",
     "myProfile": "My Profile",
+    "scanTicket": "Scan Tickets",
     "support": "Support",
     "logout": "Logout"
   },
@@ -21,7 +26,7 @@
     "noEvents": "You haven't participated in any events yet.",
     "communityGroups": "Community Groups",
     "noGroups": "You aren't part of any community groups.",
-    "startGroup": "Start a new group \u2192",
+    "startGroup": "Start a new group →",
     "earnedBadges": "Earned Badges",
     "firstBadge": "Join events to earn your first badge!",
     "activity": "Activity",
@@ -147,5 +152,44 @@
     "messageLabel": "Message",
     "messagePlaceholder": "How can we help you today?",
     "sendMessageButton": "Send Message"
+  },
+  "feedPage": {
+    "title": "Community Feed",
+    "subtitle": "Share your impact stories, photos, and inspire others!",
+    "placeholder": "What impact did you make today?",
+    "addPhoto": "Add Photo",
+    "shareImpact": "Share Impact",
+    "posting": "Posting...",
+    "postedSuccess": "Posted successfully!",
+    "noStories": "No stories yet. Be the first to share!",
+    "loadingStories": "Loading amazing stories...",
+    "like": "Like",
+    "comment": "Comment",
+    "share": "Share"
+  },
+  "teamsPage": {
+    "title": "Corporate & Group Teams",
+    "subtitle": "Compete on the CSR Leaderboard, track impact, and achieve group goals.",
+    "createTeam": "Create Team",
+    "teamName": "Team Name",
+    "description": "Description",
+    "logoUrl": "Logo Image URL",
+    "creating": "Creating...",
+    "leaderboard": "CSR Leaderboard",
+    "join": "Join Team",
+    "members": "members",
+    "points": "pts",
+    "createSuccess": "Team created successfully!",
+    "joinSuccess": "Joined team successfully!"
+  },
+  "messagesPage": {
+    "title": "Direct Messages",
+    "subtitle": "Chat with event organizers and fellow volunteers.",
+    "searchPlaceholder": "Search messages...",
+    "noMessages": "No messages yet.",
+    "typePlaceholder": "Type your message...",
+    "yourMessages": "Your Messages",
+    "selectChat": "Select a conversation from the left to start chatting with organizers or volunteers.",
+    "online": "Online"
   }
 }

@@ -14,19 +14,24 @@ export function LanguageSwitcher() {
 
   if (!mounted) return null; // Avoid hydration mismatch
 
+  const isHindi = i18n.language?.startsWith('hi');
+
   const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'hi' : 'en';
+    const newLang = isHindi ? 'en' : 'hi';
     i18n.changeLanguage(newLang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('i18nextLng', newLang);
+    }
   };
 
   return (
     <button
       onClick={toggleLanguage}
       className="flex items-center gap-2 px-3 py-2 bg-[var(--background)] hover:bg-[var(--primary)] hover:text-white border border-[var(--border)] hover:border-[var(--primary)] text-[var(--text-primary)] text-sm font-bold rounded-xl transition-all shadow-sm"
-      title="Switch Language"
+      title="Switch Language / भाषा बदलें"
     >
       <Globe className="w-4 h-4" />
-      <span>{i18n.language === 'hi' ? 'English' : 'हिन्दी'}</span>
+      <span>{isHindi ? 'English' : 'हिन्दी'}</span>
     </button>
   );
 }

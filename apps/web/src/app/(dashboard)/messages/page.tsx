@@ -6,7 +6,10 @@ import { MessageSquare, Send, Search, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
+import { useTranslation } from 'react-i18next';
+
 export default function MessagesPage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [activeChat, setActiveChat] = useState<any>(null);
   const [message, setMessage] = useState('');
@@ -48,9 +51,9 @@ export default function MessagesPage() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto h-[calc(100vh-80px)] flex flex-col">
       <div className="mb-6">
         <h1 className="text-3xl font-black font-heading text-[var(--primary)] flex items-center gap-3">
-          <MessageSquare className="w-8 h-8 text-[var(--secondary)]" /> Direct Messages
+          <MessageSquare className="w-8 h-8 text-[var(--secondary)]" /> {t('messagesPage.title', 'Direct Messages')}
         </h1>
-        <p className="text-[var(--text-secondary)] mt-1 font-medium">Chat with event organizers and fellow volunteers.</p>
+        <p className="text-[var(--text-secondary)] mt-1 font-medium">{t('messagesPage.subtitle', 'Chat with event organizers and fellow volunteers.')}</p>
       </div>
 
       <div className="flex-1 bg-[var(--surface)] border border-[var(--border)] rounded-3xl shadow-soft flex overflow-hidden">
