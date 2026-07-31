@@ -5,7 +5,6 @@ import { api } from '@/lib/api';
 import { MessageSquare, Send, Search, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
 import { useTranslation } from 'react-i18next';
 
 export default function MessagesPage() {
@@ -63,17 +62,17 @@ export default function MessagesPage() {
           <div className="p-4 border-b border-[var(--border)]">
             <div className="relative">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
-              <Input placeholder="Search messages..." className="pl-9 bg-[var(--surface)] border-[var(--border)] rounded-full h-10" />
+              <Input placeholder={t('messagesPage.searchPlaceholder', 'Search messages...')} className="pl-9 bg-[var(--surface)] border-[var(--border)] rounded-full h-10" />
             </div>
           </div>
           
           <div className="flex-1 overflow-y-auto">
             {chatsLoading ? (
-              <div className="p-4 text-center text-sm text-[var(--text-secondary)]">Loading chats...</div>
+              <div className="p-4 text-center text-sm text-[var(--text-secondary)]">{t('messagesPage.loadingChats', 'Loading chats...')}</div>
             ) : chats?.length === 0 ? (
               <div className="p-8 text-center text-sm text-[var(--text-secondary)] flex flex-col items-center">
                 <MessageSquare className="w-8 h-8 mb-2 opacity-20" />
-                No messages yet.
+                {t('messagesPage.noMessages', 'No messages yet.')}
               </div>
             ) : (
               chats?.map((chat: any) => (
@@ -125,7 +124,7 @@ export default function MessagesPage() {
                 <div>
                   <h2 className="font-bold text-[var(--text-primary)]">{activeChat.user.firstName} {activeChat.user.lastName}</h2>
                   <p className="text-xs text-[var(--text-secondary)] flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span> Online
+                    <span className="w-2 h-2 rounded-full bg-green-500"></span> {t('messagesPage.online', 'Online')}
                   </p>
                 </div>
               </div>
@@ -133,7 +132,7 @@ export default function MessagesPage() {
               {/* Chat Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messagesLoading ? (
-                  <div className="text-center text-sm text-[var(--text-secondary)]">Loading messages...</div>
+                  <div className="text-center text-sm text-[var(--text-secondary)]">{t('messagesPage.loadingMessages', 'Loading messages...')}</div>
                 ) : (
                   messages?.map((msg: any) => {
                     const isMine = msg.senderId !== activeChat.user.id;
@@ -158,7 +157,7 @@ export default function MessagesPage() {
                   <Input 
                     value={message} 
                     onChange={e => setMessage(e.target.value)} 
-                    placeholder="Type your message..." 
+                    placeholder={t('messagesPage.typePlaceholder', 'Type your message...')} 
                     className="flex-1 bg-[var(--surface)] border-[var(--border)] rounded-full px-4 h-12" 
                   />
                   <Button 
@@ -176,8 +175,8 @@ export default function MessagesPage() {
               <div className="w-24 h-24 bg-[var(--primary)]/5 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-12 h-12 text-[var(--primary)]/40" />
               </div>
-              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">Your Messages</h2>
-              <p className="max-w-xs text-center">Select a conversation from the left to start chatting with organizers or volunteers.</p>
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">{t('messagesPage.yourMessages', 'Your Messages')}</h2>
+              <p className="max-w-xs text-center">{t('messagesPage.selectChat', 'Select a conversation from the left to start chatting with organizers or volunteers.')}</p>
             </div>
           )}
         </div>

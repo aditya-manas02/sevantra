@@ -186,10 +186,23 @@
     "title": "Direct Messages",
     "subtitle": "Chat with event organizers and fellow volunteers.",
     "searchPlaceholder": "Search messages...",
+    "loadingChats": "Loading chats...",
     "noMessages": "No messages yet.",
+    "loadingMessages": "Loading messages...",
     "typePlaceholder": "Type your message...",
     "yourMessages": "Your Messages",
     "selectChat": "Select a conversation from the left to start chatting with organizers or volunteers.",
     "online": "Online"
+  },
+  "scan": {
+    "title": "Volunteer Check-in",
+    "subtitle": "Select an event and scan volunteer QR codes to mark them as checked in.",
+    "selectEvent": "Select Event to Manage",
+    "chooseEvent": "-- Choose an event --",
+    "processing": "Processing...",
+    "waitingForEvent": "Please select an event above to start the scanner.",
+    "success": "Volunteer successfully checked in!",
+    "badgeAwarded": "New Badge Awarded",
+    "error": "Failed to check in volunteer."
   }
 }

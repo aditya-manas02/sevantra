@@ -6,7 +6,6 @@ import { Image as ImageIcon, Send, MessageCircle, Heart, Share2, Sparkles } from
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-
 import { useTranslation } from 'react-i18next';
 
 export default function FeedPage() {
@@ -69,7 +68,7 @@ export default function FeedPage() {
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="What impact did you make today?"
+              placeholder={t('feedPage.placeholder', 'What impact did you make today?')}
               className="w-full bg-[var(--background)] border border-[var(--border)] rounded-2xl p-4 min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-[var(--text-primary)]"
             />
             
@@ -88,14 +87,14 @@ export default function FeedPage() {
             <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]">
               <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleImageUpload} />
               <Button variant="ghost" className="text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/10 flex items-center gap-2 font-bold" onClick={() => fileInputRef.current?.click()}>
-                <ImageIcon className="w-5 h-5" /> Add Photo
+                <ImageIcon className="w-5 h-5" /> {t('feedPage.addPhoto', 'Add Photo')}
               </Button>
               <Button 
                 onClick={handlePost} 
                 disabled={!content.trim() || createPost.isPending}
                 className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white font-bold rounded-full px-6 flex items-center gap-2"
               >
-                {createPost.isPending ? 'Posting...' : 'Share Impact'} <Send className="w-4 h-4" />
+                {createPost.isPending ? t('feedPage.posting', 'Posting...') : t('feedPage.shareImpact', 'Share Impact')} <Send className="w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -104,9 +103,9 @@ export default function FeedPage() {
 
       <div className="space-y-6">
         {isLoading ? (
-          <div className="text-center py-12 text-[var(--text-secondary)] font-medium animate-pulse">Loading amazing stories...</div>
+          <div className="text-center py-12 text-[var(--text-secondary)] font-medium animate-pulse">{t('feedPage.loadingStories', 'Loading amazing stories...')}</div>
         ) : posts?.length === 0 ? (
-          <div className="text-center py-12 text-[var(--text-secondary)] font-medium bg-[var(--surface)] rounded-3xl border border-[var(--border)]">No stories yet. Be the first to share!</div>
+          <div className="text-center py-12 text-[var(--text-secondary)] font-medium bg-[var(--surface)] rounded-3xl border border-[var(--border)]">{t('feedPage.noStories', 'No stories yet. Be the first to share!')}</div>
         ) : (
           posts?.map((post: any) => (
             <div key={post.id} className="bg-[var(--surface)] p-6 rounded-3xl shadow-sm border border-[var(--border)] hover:shadow-soft transition-shadow duration-300">
@@ -132,13 +131,13 @@ export default function FeedPage() {
               
               <div className="flex items-center gap-6 pt-4 border-t border-[var(--border)]">
                 <button className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-red-500 font-bold text-sm transition-colors group">
-                  <Heart className="w-5 h-5 group-hover:fill-red-500 transition-all" /> Like
+                  <Heart className="w-5 h-5 group-hover:fill-red-500 transition-all" /> {t('feedPage.like', 'Like')}
                 </button>
                 <button className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-blue-500 font-bold text-sm transition-colors">
-                  <MessageCircle className="w-5 h-5" /> Comment
+                  <MessageCircle className="w-5 h-5" /> {t('feedPage.comment', 'Comment')}
                 </button>
                 <button className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-green-500 font-bold text-sm transition-colors ml-auto">
-                  <Share2 className="w-5 h-5" /> Share
+                  <Share2 className="w-5 h-5" /> {t('feedPage.share', 'Share')}
                 </button>
               </div>
             </div>
