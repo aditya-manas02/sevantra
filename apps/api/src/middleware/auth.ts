@@ -19,6 +19,10 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
       return res.status(401).json({ error: 'Unauthorized: Invalid user' });
     }
 
+    if (user.isBanned) {
+      return res.status(403).json({ error: 'Your account has been suspended by an administrator.' });
+    }
+
     (req as any).user = user;
     next();
   } catch (error) {

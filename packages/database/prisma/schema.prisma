@@ -36,6 +36,7 @@ model User {
   locationCity String?
   skills       String[]
   
+  isBanned        Boolean @default(false)
   isEmailVerified Boolean @default(false)
   verificationToken String?
   verificationTokenExpiresAt DateTime?
@@ -122,6 +123,7 @@ model Event {
   requirements   String?
   minimumAge     Int?
   imageUrl       String?
+  isFeatured     Boolean @default(false)
   
   acceptsDonations Boolean @default(false)
   upiId            String?
