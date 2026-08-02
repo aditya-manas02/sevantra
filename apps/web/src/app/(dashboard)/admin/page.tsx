@@ -145,18 +145,18 @@ export default function AdminDashboardPage() {
   if (!user || user.role !== 'PLATFORM_ADMIN') return (
     <div className="p-8 max-w-2xl mx-auto mt-12 text-center bg-[var(--background)] text-red-700 rounded-3xl shadow-soft border border-[var(--border)] p-12">
       <ShieldCheck className="w-16 h-16 mx-auto mb-4 text-red-500 opacity-50" />
-      <h1 className="text-2xl font-bold mb-2">Access Restricted</h1>
-      <p className="font-medium">You do not have administrative privileges to view this area.</p>
+      <h1 className="text-2xl font-bold mb-2">{t('admin.accessRestricted', 'Access Restricted')}</h1>
+      <p className="font-medium">{t('admin.accessRestrictedDesc', 'You do not have administrative privileges to view this area.')}</p>
     </div>
   );
 
   const { stats, recentEvents, pendingOrgs = [], activityData = [] } = adminData || {};
 
   const statCards = [
-    { title: "Community Members", value: stats?.totalUsers || 0, icon: Users, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/20" },
-    { title: "Organizations", value: stats?.totalOrgs || 0, icon: Building2, color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-900/20" },
-    { title: "Total Events", value: stats?.totalEvents || 0, icon: Calendar, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
-    { title: "Event RSVPs", value: stats?.totalRegistrations || 0, icon: HandHeart, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-900/20" }
+    { title: t('admin.communityMembers', 'Community Members'), value: stats?.totalUsers || 0, icon: Users, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/20" },
+    { title: t('sidebar.organizations', 'Organizations'), value: stats?.totalOrgs || 0, icon: Building2, color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-900/20" },
+    { title: t('admin.totalEvents', 'Total Events'), value: stats?.totalEvents || 0, icon: Calendar, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
+    { title: t('admin.eventRSVPs', 'Event RSVPs'), value: stats?.totalRegistrations || 0, icon: HandHeart, color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-900/20" }
   ];
 
   return (
@@ -165,9 +165,9 @@ export default function AdminDashboardPage() {
         <div>
           <h1 className="text-4xl md:text-5xl font-black font-heading text-[var(--primary)] tracking-tight flex items-center gap-3">
             <ShieldCheck className="w-8 h-8 md:w-10 md:h-10 text-[var(--secondary)]" />
-            Admin Command Center
+            {t('admin.title', 'Admin Command Center')}
           </h1>
-          <p className="text-[var(--text-secondary)] mt-3 text-lg font-medium">Full governance, moderation, and management authority.</p>
+          <p className="text-[var(--text-secondary)] mt-3 text-lg font-medium">{t('admin.subtitle', 'Full governance, moderation, and management authority.')}</p>
         </div>
       </div>
 
@@ -176,31 +176,31 @@ export default function AdminDashboardPage() {
           onClick={() => { setActiveTab('overview'); setSearchQuery(''); }} 
           className={`px-4 py-3 font-bold transition-colors whitespace-nowrap ${activeTab === 'overview' ? 'border-b-4 border-[var(--primary)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--primary)]'}`}
         >
-          Platform Overview
+          {t('admin.tabOverview', 'Platform Overview')}
         </button>
         <button 
           onClick={() => { setActiveTab('users'); setSearchQuery(''); }} 
           className={`px-4 py-3 font-bold transition-colors whitespace-nowrap ${activeTab === 'users' ? 'border-b-4 border-[var(--primary)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--primary)]'}`}
         >
-          User Management
+          {t('admin.tabUsers', 'User Management')}
         </button>
         <button 
           onClick={() => { setActiveTab('events'); setSearchQuery(''); }} 
           className={`px-4 py-3 font-bold transition-colors whitespace-nowrap ${activeTab === 'events' ? 'border-b-4 border-[var(--primary)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--primary)]'}`}
         >
-          Event Governance
+          {t('admin.tabEvents', 'Event Governance')}
         </button>
         <button 
           onClick={() => { setActiveTab('organizations'); setSearchQuery(''); }} 
           className={`px-4 py-3 font-bold transition-colors whitespace-nowrap flex items-center gap-2 ${activeTab === 'organizations' ? 'border-b-4 border-[var(--primary)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--primary)]'}`}
         >
-          Organizations {pendingOrgs.length > 0 && <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{pendingOrgs.length}</span>}
+          {t('admin.tabOrgs', 'Organizations')} {pendingOrgs.length > 0 && <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{pendingOrgs.length}</span>}
         </button>
         <button 
           onClick={() => { setActiveTab('content'); setSearchQuery(''); }} 
           className={`px-4 py-3 font-bold transition-colors whitespace-nowrap ${activeTab === 'content' ? 'border-b-4 border-[var(--primary)] text-[var(--primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--primary)]'}`}
         >
-          Content Moderation
+          {t('admin.tabContent', 'Content Moderation')}
         </button>
       </div>
 
@@ -225,7 +225,7 @@ export default function AdminDashboardPage() {
             <div className="bg-[var(--surface)] p-8 md:p-10 rounded-3xl shadow-soft border border-amber-500/30">
               <div className="flex items-center justify-between mb-8 border-b border-[var(--border)]/50 pb-4">
                 <h2 className="text-2xl font-black font-heading text-[var(--text-primary)] flex items-center gap-3">
-                  <AlertTriangle className="text-amber-500 w-6 h-6" /> Pending Verification Requests
+                  <AlertTriangle className="text-amber-500 w-6 h-6" /> {t('admin.pendingRequests', 'Pending Verification Requests')}
                 </h2>
                 <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-400 text-sm py-1 px-3 rounded-full font-bold">{pendingOrgs.length} Pending</span>
               </div>
@@ -248,10 +248,10 @@ export default function AdminDashboardPage() {
                     
                     <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto">
                       <Button onClick={() => verifyOrgMutation.mutate({ id: org.id, status: 'VERIFIED' })} disabled={verifyOrgMutation.isPending} className="flex-1 md:flex-none bg-green-600 hover:bg-green-700 text-white font-bold">
-                        <Check className="w-4 h-4 mr-2" /> Approve
+                        <Check className="w-4 h-4 mr-2" /> {t('admin.approve', 'Approve')}
                       </Button>
                       <Button variant="outline" onClick={() => verifyOrgMutation.mutate({ id: org.id, status: 'REJECTED' })} disabled={verifyOrgMutation.isPending} className="flex-1 md:flex-none text-red-600 hover:text-red-700">
-                        <X className="w-4 h-4 mr-2" /> Reject
+                        <X className="w-4 h-4 mr-2" /> {t('admin.reject', 'Reject')}
                       </Button>
                     </div>
                   </div>
@@ -265,7 +265,7 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between mb-8 border-b border-[var(--border)]/50 pb-4">
                 <div className="flex items-center gap-3">
                   <Activity className="w-6 h-6 text-[var(--primary)]" />
-                  <h2 className="text-xl font-black font-heading text-[var(--text-primary)]">User Signups (Last 7 Days)</h2>
+                  <h2 className="text-xl font-black font-heading text-[var(--text-primary)]">{t('admin.userSignups', 'User Signups (Last 7 Days)')}</h2>
                 </div>
               </div>
               <div className="h-[300px] w-full">
@@ -283,7 +283,7 @@ export default function AdminDashboardPage() {
 
             <div className="bg-[var(--surface)] p-8 rounded-3xl shadow-soft border border-[var(--border)] flex flex-col">
               <div className="flex items-center justify-between mb-8 border-b border-[var(--border)]/50 pb-4">
-                <h2 className="text-xl font-black font-heading text-[var(--text-primary)]">Recent Events</h2>
+                <h2 className="text-xl font-black font-heading text-[var(--text-primary)]">{t('admin.recentEvents', 'Recent Events')}</h2>
                 <span className="text-xs bg-[var(--primary)]/10 text-[var(--primary)] px-2 py-1 font-bold rounded-full">{recentEvents?.length || 0} Recent</span>
               </div>
               
@@ -308,14 +308,14 @@ export default function AdminDashboardPage() {
         <div className="bg-[var(--surface)] p-8 rounded-3xl shadow-soft border border-[var(--border)] animate-in fade-in duration-300">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-2xl font-black font-heading text-[var(--text-primary)] flex items-center gap-3">
-              <Users className="text-[var(--primary)] w-6 h-6" /> User Management & Moderation
+              <Users className="text-[var(--primary)] w-6 h-6" /> {t('admin.tabUsers', 'User Management')}
             </h2>
             <div className="relative w-full md:w-72">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
               <Input 
                 value={searchQuery} 
                 onChange={e => setSearchQuery(e.target.value)} 
-                placeholder="Search users by name or email..." 
+                placeholder="Search users..." 
                 className="pl-9 bg-[var(--background)] border-[var(--border)] rounded-xl"
               />
             </div>
@@ -332,7 +332,7 @@ export default function AdminDashboardPage() {
                     <th className="pb-4 font-bold">Role</th>
                     <th className="pb-4 font-bold">Status</th>
                     <th className="pb-4 font-bold">Joined</th>
-                    <th className="pb-4 font-bold text-right">Super-Admin Actions</th>
+                    <th className="pb-4 font-bold text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border)]">
@@ -368,7 +368,7 @@ export default function AdminDashboardPage() {
                             onClick={() => banMutation.mutate(u.id)}
                             className={u.isBanned ? "bg-green-600 hover:bg-green-700 text-white font-bold" : "text-amber-600 border-amber-300 hover:bg-amber-50"}
                           >
-                            {u.isBanned ? <><UserCheck className="w-3.5 h-3.5 mr-1"/> Unban</> : <><Ban className="w-3.5 h-3.5 mr-1"/> Ban</>}
+                            {u.isBanned ? <><UserCheck className="w-3.5 h-3.5 mr-1"/> {t('admin.unban', 'Unban')}</> : <><Ban className="w-3.5 h-3.5 mr-1"/> {t('admin.ban', 'Ban')}</>}
                           </Button>
                           <Button 
                             size="sm"
@@ -397,14 +397,14 @@ export default function AdminDashboardPage() {
         <div className="bg-[var(--surface)] p-8 rounded-3xl shadow-soft border border-[var(--border)] animate-in fade-in duration-300">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-2xl font-black font-heading text-[var(--text-primary)] flex items-center gap-3">
-              <Calendar className="text-[var(--primary)] w-6 h-6" /> Event Governance & Featuring
+              <Calendar className="text-[var(--primary)] w-6 h-6" /> {t('admin.tabEvents', 'Event Governance')}
             </h2>
             <div className="relative w-full md:w-72">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
               <Input 
                 value={searchQuery} 
                 onChange={e => setSearchQuery(e.target.value)} 
-                placeholder="Search events by title..." 
+                placeholder="Search events..." 
                 className="pl-9 bg-[var(--background)] border-[var(--border)] rounded-xl"
               />
             </div>
@@ -446,7 +446,7 @@ export default function AdminDashboardPage() {
                             className={`px-3 py-1 text-xs font-bold rounded-full flex items-center gap-1 cursor-pointer transition-transform hover:scale-105 ${ev.isFeatured ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}
                           >
                             <Star className={`w-3.5 h-3.5 ${ev.isFeatured ? 'fill-amber-500' : ''}`} />
-                            {ev.isFeatured ? 'Featured' : 'Standard'}
+                            {ev.isFeatured ? t('admin.featured', 'Featured') : t('admin.standard', 'Standard')}
                           </button>
                         </td>
                         <td className="py-4 text-right space-x-2">
@@ -460,7 +460,7 @@ export default function AdminDashboardPage() {
                             }}
                             className="text-red-600 border-red-300 hover:bg-red-50"
                           >
-                            <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete
+                            <Trash2 className="w-3.5 h-3.5 mr-1" /> {t('admin.delete', 'Delete')}
                           </Button>
                         </td>
                       </tr>
@@ -477,7 +477,7 @@ export default function AdminDashboardPage() {
         <div className="bg-[var(--surface)] p-8 rounded-3xl shadow-soft border border-[var(--border)] animate-in fade-in duration-300">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-2xl font-black font-heading text-[var(--text-primary)] flex items-center gap-3">
-              <Building2 className="text-[var(--primary)] w-6 h-6" /> Organization Oversight
+              <Building2 className="text-[var(--primary)] w-6 h-6" /> {t('admin.tabOrgs', 'Organizations')}
             </h2>
             <div className="relative w-full md:w-72">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
@@ -525,12 +525,12 @@ export default function AdminDashboardPage() {
                         <td className="py-4 text-right space-x-2">
                           {org.verificationStatus !== 'VERIFIED' && (
                             <Button size="sm" onClick={() => verifyOrgMutation.mutate({ id: org.id, status: 'VERIFIED' })} className="bg-green-600 hover:bg-green-700 text-white font-bold">
-                              Verify
+                              {t('admin.verify', 'Verify')}
                             </Button>
                           )}
                           {org.verificationStatus === 'VERIFIED' && (
                             <Button size="sm" variant="outline" onClick={() => verifyOrgMutation.mutate({ id: org.id, status: 'REJECTED' })} className="text-red-600 hover:bg-red-50 border-red-200">
-                              Revoke
+                              {t('admin.revoke', 'Revoke')}
                             </Button>
                           )}
                         </td>
@@ -548,7 +548,7 @@ export default function AdminDashboardPage() {
         <div className="bg-[var(--surface)] p-8 rounded-3xl shadow-soft border border-[var(--border)] animate-in fade-in duration-300">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <h2 className="text-2xl font-black font-heading text-[var(--text-primary)] flex items-center gap-3">
-              <Sparkles className="text-[var(--primary)] w-6 h-6" /> Feed Post Moderation
+              <Sparkles className="text-[var(--primary)] w-6 h-6" /> {t('admin.tabContent', 'Content Moderation')}
             </h2>
           </div>
 
@@ -590,7 +590,7 @@ export default function AdminDashboardPage() {
                       }}
                       className="text-red-600 border-red-300 hover:bg-red-50"
                     >
-                      <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete Post
+                      <Trash2 className="w-3.5 h-3.5 mr-1" /> {t('admin.delete', 'Delete')}
                     </Button>
                   </div>
                 </div>

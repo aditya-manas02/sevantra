@@ -120,7 +120,7 @@ export const getEvents = async (req: Request, res: Response) => {
         FROM "Event" e
         WHERE (3959 * acos(least(1.0, cos(radians(${latitude})) * cos(radians(e.latitude)) * cos(radians(e.longitude) - radians(${longitude})) + sin(radians(${latitude})) * sin(radians(e.latitude))))) <= ${radiusMiles}
         ${categoryFilter}
-        ORDER BY distance ASC
+        ORDER BY e."isFeatured" DESC, distance ASC
         LIMIT 50;
       `;
 
@@ -134,7 +134,7 @@ export const getEvents = async (req: Request, res: Response) => {
 
     const events = await prisma.event.findMany({
       where: filter,
-      orderBy: { startDate: 'asc' },
+      orderBy: [{ isFeatured: 'desc' }, { startDate: 'asc' }],
       take: 50
     });
 

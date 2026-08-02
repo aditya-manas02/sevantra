@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import EventDiscoveryMapDynamic from '@/components/EventDiscoveryMapDynamic';
 import { Input } from '@/components/ui/input';
-import { Leaf, MapPin } from 'lucide-react';
+import { Leaf, MapPin, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -91,6 +91,11 @@ export default function EventDiscoveryPage() {
                 <Link key={event.id} href={`/events/${event.id}`} className="block group">
                   <div className="p-6 h-full bg-[var(--surface)] rounded-3xl border border-[var(--border)] shadow-soft hover:shadow-xl transition-all duration-500 flex flex-col relative overflow-hidden group/card transform hover:-translate-y-2">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] opacity-80 group-hover/card:h-full group-hover/card:opacity-[0.03] transition-all duration-500 z-0" />
+                    {event.isFeatured && (
+                      <div className="absolute top-4 right-4 bg-amber-500 text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1 z-20">
+                        <Star className="w-3 h-3 fill-white" /> {t('events.featured', 'Featured')}
+                      </div>
+                    )}
                     <div className="relative z-10 flex flex-col h-full">
                       <h3 className="font-black font-heading text-2xl text-[var(--text-primary)] mb-3 leading-tight mt-2 line-clamp-2 group-hover/card:text-[var(--primary)] transition-colors">{event.title}</h3>
                       <p className="text-sm font-medium text-[var(--text-secondary)] mb-6 flex-1 flex items-start gap-2">

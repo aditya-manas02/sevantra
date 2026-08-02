@@ -78,7 +78,8 @@
   "events": {
     "discoverTitle": "Community Events",
     "discoverSubtitle": "Find ways to give back to nature and your community.",
-    "searchArea": "Search Area (Miles)",
+    "searchArea": "Within",
+    "miles": "miles",
     "loadingEvents": "Discovering local events...",
     "noEventsFound": "We couldn't find any events right here. Try expanding your search area!",
     "milesAway": "miles away",
@@ -112,7 +113,9 @@
     "hostFirstEvent": "Host Your First Event",
     "rsvps": "RSVPs",
     "checkIn": "Check-in Attendees",
-    "view": "View"
+    "view": "View",
+    "featured": "Featured",
+    "viewDetails": "View Details"
   },
   "orgs": {
     "startCommunityGroup": "Start a Community Group",
@@ -204,5 +207,31 @@
     "success": "Volunteer successfully checked in!",
     "badgeAwarded": "New Badge Awarded",
     "error": "Failed to check in volunteer."
+  },
+  "admin": {
+    "title": "Admin Command Center",
+    "subtitle": "Full governance, moderation, and management authority.",
+    "tabOverview": "Platform Overview",
+    "tabUsers": "User Management",
+    "tabEvents": "Event Governance",
+    "tabOrgs": "Organizations",
+    "tabContent": "Content Moderation",
+    "accessRestricted": "Access Restricted",
+    "accessRestrictedDesc": "You do not have administrative privileges to view this area.",
+    "communityMembers": "Community Members",
+    "totalEvents": "Total Events",
+    "eventRSVPs": "Event RSVPs",
+    "pendingRequests": "Pending Verification Requests",
+    "approve": "Approve",
+    "reject": "Reject",
+    "verify": "Verify",
+    "revoke": "Revoke",
+    "userSignups": "User Signups (Last 7 Days)",
+    "recentEvents": "Recent Events",
+    "ban": "Ban",
+    "unban": "Unban",
+    "delete": "Delete",
+    "featured": "Featured",
+    "standard": "Standard"
   }
 }
