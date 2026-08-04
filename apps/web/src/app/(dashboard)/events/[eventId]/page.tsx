@@ -9,6 +9,7 @@ import { Calendar, MapPin, Users, HeartHandshake, ArrowRight, MessageCircle, QrC
 import { QRCodeSVG } from 'qrcode.react';
 import { jsPDF } from 'jspdf';
 import { EventTicket } from '@/components/EventTicket';
+import { CertificateModal } from '@/components/CertificateModal';
 
 function DonationWidget({ event }: { event: any }) {
   const [amount, setAmount] = React.useState<number | string>(event.minDonationAmount || 100);
@@ -138,6 +139,8 @@ export default function EventDetailPage() {
     }
   });
 
+  const [showCertModal, setShowCertModal] = React.useState(false);
+
   const { data: registration } = useQuery({
     queryKey: ['registration', eventId],
     queryFn: async () => {
@@ -151,6 +154,8 @@ export default function EventDetailPage() {
   });
 
   const downloadCertificate = () => {
+    setShowCertModal(true);
+  };
     if (!event || !user) return;
     const doc = new jsPDF({
       orientation: 'landscape',
@@ -361,6 +366,17 @@ export default function EventDetailPage() {
       </div>
 
       <EventComments eventId={eventId as string} user={user} />
+
+      {user && (
+        <CertificateModal
+          isOpen={showCertModal}
+          onClose={() => setShowCertModal(false)}
+          volunteerName={`${user.firstName} ${user.lastName}`}
+          eventTitle={event.title}
+          eventDate={new Date(event.startDate).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}
+          organizationName={event.organization.name}
+        />
+      )}
     </div>
   );
 }

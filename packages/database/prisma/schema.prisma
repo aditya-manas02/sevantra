@@ -54,6 +54,9 @@ model User {
   posts        Post[]
   sentMessages Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+  reportedIssues CivicIssue[] @relation("ReportedIssues")
+  resolvedIssues CivicIssue[] @relation("ResolvedIssues")
+  eventUpdates   EventUpdate[]
 }
 
 enum OrgType {
@@ -135,6 +138,7 @@ model Event {
   feedbacks      EventFeedback[]
   comments       EventComment[]
   donations      Donation[]
+  updates        EventUpdate[]
 }
 
 enum RegistrationStatus {
@@ -267,4 +271,47 @@ model Message {
   receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
   isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
+}
+
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model CivicIssue {
+  id                  String      @id @default(uuid())
+  title               String
+  description         String
+  category            String      @default("OTHER") // POTHOLE, WASTE, STREETLIGHT, WATER, OTHER
+  status              IssueStatus @default(OPEN)
+  latitude            Float
+  longitude           Float
+  locationName        String
+  imageUrl            String?
+  resolutionImageUrl  String?
+  
+  reporterId          String
+  reporter            User        @relation("ReportedIssues", fields: [reporterId], references: [id], onDelete: Cascade)
+  
+  resolverId          String?
+  resolver            User?       @relation("ResolvedIssues", fields: [resolverId], references: [id])
+  
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model EventUpdate {
+  id             String   @id @default(uuid())
+  title          String
+  content        String
+  isAnnouncement Boolean  @default(false)
+  
+  eventId        String
+  event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  authorId       String
+  author         User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  createdAt      DateTime @default(now())
 }

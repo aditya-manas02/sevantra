@@ -3,7 +3,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LayoutDashboard, Compass, CalendarPlus, Building2, UserCircle, Settings, LogOut, Menu, X, CalendarHeart, LifeBuoy, QrCode, Sparkles, Trophy, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Compass, CalendarPlus, Building2, UserCircle, Settings, LogOut, Menu, X, CalendarHeart, LifeBuoy, QrCode, Sparkles, Trophy, MessageSquare, AlertCircle } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { BottomNav } from "@/components/BottomNav";
@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 
 const navItems = [
   { icon: LayoutDashboard, key: "adminDashboard", href: "/admin", fallback: "Admin Dashboard" },
+  { icon: AlertCircle, key: "civicIssues", href: "/issues", fallback: "Civic Alerts" },
   { icon: Sparkles, key: "feed", href: "/feed", fallback: "Community Feed" },
   { icon: Trophy, key: "teams", href: "/teams", fallback: "Corporate Teams" },
   { icon: MessageSquare, key: "messages", href: "/messages", fallback: "Messages" },

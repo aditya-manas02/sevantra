@@ -1,6 +1,7 @@
 {
   "sidebar": {
     "adminDashboard": "Admin Dashboard",
+    "civicIssues": "Civic Alerts",
     "feed": "Community Feed",
     "teams": "Corporate Teams",
     "messages": "Messages",
@@ -233,5 +234,16 @@
     "delete": "Delete",
     "featured": "Featured",
     "standard": "Standard"
+  },
+  "issues": {
+    "title": "Civic Issue Reporting & Resolution",
+    "subtitle": "Report infrastructure issues, waste dumps, or potholes and track community resolutions.",
+    "reportButton": "Report Civic Issue",
+    "tabAll": "All Alerts",
+    "tabOpen": "Open",
+    "tabInProgress": "In Progress",
+    "tabResolved": "Resolved",
+    "reportedSuccess": "Civic issue reported successfully!",
+    "updatedSuccess": "Issue status updated successfully!"
   }
 }
