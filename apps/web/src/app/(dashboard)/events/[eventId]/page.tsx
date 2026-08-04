@@ -156,50 +156,6 @@ export default function EventDetailPage() {
   const downloadCertificate = () => {
     setShowCertModal(true);
   };
-    if (!event || !user) return;
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
-    
-    doc.setFillColor(245, 247, 246); // var(--background)
-    doc.rect(0, 0, 297, 210, 'F');
-    
-    doc.setTextColor(34, 139, 34); // var(--primary)
-    doc.setFontSize(40);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Certificate of Impact', 148.5, 50, { align: 'center' });
-    
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'normal');
-    doc.text('This is to certify that', 148.5, 75, { align: 'center' });
-    
-    doc.setFontSize(32);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${user.firstName} ${user.lastName}`, 148.5, 95, { align: 'center' });
-    
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`has successfully participated in the event`, 148.5, 115, { align: 'center' });
-    
-    doc.setFontSize(24);
-    doc.setFont('helvetica', 'bold');
-    doc.text(event.title, 148.5, 135, { align: 'center' });
-    
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'normal');
-    const dateStr = new Date(event.startDate).toLocaleDateString();
-    doc.text(`Hosted by ${event.organization.name} on ${dateStr}`, 148.5, 155, { align: 'center' });
-    
-    doc.setDrawColor(34, 139, 34);
-    doc.setLineWidth(1);
-    doc.line(98.5, 175, 198.5, 175);
-    doc.text('Sevantra Verified', 148.5, 185, { align: 'center' });
-    
-    doc.save(`Sevantra-Certificate-${event.id}.pdf`);
-  };
 
   if (isLoading) return <div className="p-8 text-[var(--text-secondary)] font-medium text-center bg-[var(--surface)] rounded-3xl shadow-soft">Loading event details...</div>;
   if (!event) return <div className="p-8 text-white bg-[var(--background)]0 font-bold rounded-3xl text-center shadow-soft">Event not found.</div>;
